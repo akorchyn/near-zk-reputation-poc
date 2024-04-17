@@ -1,0 +1,18 @@
+[package]
+name = "testing-contract"
+description = "cargo-near-new-project-description"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = "5.0.0"
+plonky2.workspace = true
+plonky2_ed25519.workspace = true
+getrandom = { version = "0.2", features = ["custom"] }
+rand = "0.8"
+
+[dev-dependencies]
+near-sdk = { version = "5.0.0", features = ["unit-testing"] }

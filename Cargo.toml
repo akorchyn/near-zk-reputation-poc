@@ -1,0 +1,69 @@
+[workspace]
+members = [
+    "contracts/testing-contract",
+    "deps/plonky2_ed25519",
+    "deps/plonky2/plonky2",
+    "plonky2-reputation",
+]
+exclude = ["contracts/tests"]
+resolver = "2"
+
+[profile.release]
+codegen-units = 1
+# Tell `rustc` to optimize for small code size.
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+# Opt into extra safety checks on arithmetic operations https://stackoverflow.com/a/64136471/249801
+overflow-checks = true
+
+[workspace.package]
+authors = ["akorchyn"]
+edition = "2021"
+version = "0.1.0"
+repository = "https://github.com/akorchyn/zk-near"
+
+[workspace.dependencies]
+# Near ecosystem
+near-sdk = "5.0.0"
+# near-workspaces = { version = "0.10.0", features = ["unstable"] }
+
+# General
+serde_json = "1"
+tokio = { version = "1.12.0", features = ["full"] }
+anyhow = "1.0"
+schemars = { version = "0.8.11" }
+serde = { version = "1.0" }
+thiserror = { version = "1.0" }
+
+# crypto 
+secp256k1 = "0.28"
+aes-siv = "0.7.0"
+bs58 = "0.5"
+
+# ZK
+near_mimc = { path = "contract-libraries/near_mimc" }
+near_groth16_verifier = { path = "contract-libraries/groth_verifier/near_groth16_verifier" }
+near_plonk_verifier = { path = "contract-libraries/plonk_verifier/near_plonk_verifier" }
+
+
+ahash = { version = "0.8.7", default-features = false, features = [
+    "compile-time-rng",
+] } # NOTE: Be sure to keep this version the same as the dependency in `hashbrown`.
+hashbrown = { version = "0.14.3", default-features = false, features = [
+    "ahash",
+    "serde",
+] } # NOTE: When upgrading, see `ahash` dependency.
+itertools = { version = "0.11.0", default-features = false }
+log = { version = "0.4.14", default-features = false }
+num = { version = "0.4", default-features = false, features = ["rand"] }
+rand = { version = "0.8.4", default-features = false }
+static_assertions = { version = "1.1.0", default-features = false }
+unroll = { version = "0.1.5", default-features = false }
+
+plonky2_ed25519 = { path = "./deps/plonky2_ed25519" }
+plonky2 = { path = "./deps/plonky2/plonky2" }
+
+[patch."https://github.com/Electron-Labs/plonky2"]
+plonky2 = { path = "deps/plonky2/plonky2" }

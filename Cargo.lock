@@ -909,11 +909,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "env_filter"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a009aa4810eb158359dda09d0c87378e4bbb89b5a801f016885a4707ba24f7ea"
+dependencies = [
+ "log",
+ "regex",
+]
+
+[[package]]
 name = "env_logger"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a12e6657c4c97ebab115a42dcee77225f7f482cdd841cf7088c657a42e9e00e7"
 dependencies = [
+ "log",
+]
+
+[[package]]
+name = "env_logger"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38b35839ba51819680ba087cd351788c9a3c476841207e0b8cee0b04722343b9"
+dependencies = [
+ "anstream",
+ "anstyle",
+ "env_filter",
+ "humantime",
  "log",
 ]
 
@@ -1267,6 +1290,12 @@ name = "httpdate"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
+
+[[package]]
+name = "humantime"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
 name = "hyper"
@@ -2135,27 +2164,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db23d408679286588f4d4644f965003d056e3dd5abcaaa938116871d7ce2fee7"
 
 [[package]]
-name = "plonky-reputation"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "base64 0.22.0",
- "clap 4.5.4",
- "ed25519-dalek 1.0.1",
- "hex",
- "hex-literal",
- "itertools 0.11.0",
- "log",
- "plonky2",
- "plonky2_crypto",
- "plonky2_ed25519",
- "plonky2_sha512",
- "rand 0.7.3",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "plonky2"
 version = "0.1.4"
 dependencies = [
@@ -2163,7 +2171,7 @@ dependencies = [
  "anyhow",
  "borsh",
  "criterion",
- "env_logger",
+ "env_logger 0.9.3",
  "ff",
  "hashbrown 0.14.3",
  "itertools 0.11.0",
@@ -2171,6 +2179,7 @@ dependencies = [
  "keccak-hash",
  "lazy_static",
  "log",
+ "near-sdk",
  "num",
  "num_cpus",
  "plonky2_field",
@@ -2185,6 +2194,28 @@ dependencies = [
  "structopt",
  "tynm",
  "unroll",
+]
+
+[[package]]
+name = "plonky2-reputation"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "base64 0.22.0",
+ "clap 4.5.4",
+ "ed25519-dalek 1.0.1",
+ "env_logger 0.11.3",
+ "hex",
+ "hex-literal",
+ "itertools 0.11.0",
+ "log",
+ "plonky2",
+ "plonky2_crypto",
+ "plonky2_ed25519",
+ "plonky2_sha512",
+ "rand 0.7.3",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -2210,7 +2241,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "curve25519-dalek 4.0.0",
- "env_logger",
+ "env_logger 0.9.3",
  "itertools 0.11.0",
  "log",
  "num",
@@ -3053,9 +3084,9 @@ version = "0.1.0"
 dependencies = [
  "getrandom 0.2.14",
  "near-sdk",
- "plonky2",
- "plonky2_ed25519",
+ "plonky2-reputation",
  "rand 0.8.5",
+ "serde_json",
 ]
 
 [[package]]

@@ -5,6 +5,8 @@ use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{CircuitConfig, VerifierCircuitData};
 use plonky2::plonk::config::Hasher;
 use plonky2::plonk::proof::ProofWithPublicInputs;
+use plonky2::timed;
+use plonky2::util::timing::TimingTree;
 use plonky2::{
     hash::{
         hash_types::HashOutTarget, merkle_proofs::MerkleProofTarget, merkle_tree::MerkleTree,
@@ -12,7 +14,7 @@ use plonky2::{
     },
     iop::target::{BoolTarget, Target},
 };
-use plonky2_ed25519::gadgets::eddsa::{bits_in_le, bits_to_biguint_target};
+use plonky2_ed25519::gadgets::eddsa::bits_in_le;
 use plonky2_sha512::gadgets::sha512::array_to_bits;
 
 use crate::{Proof, C, D, F};
@@ -34,30 +36,26 @@ pub struct ReputationTargets {
 }
 
 impl ReputationSet {
-    pub fn verify(
-        &self,
-        verifier_data: VerifierCircuitData<F, C, D>,
-        proof: Proof,
-    ) -> anyhow::Result<()> {
-        verifier_data.verify(ProofWithPublicInputs {
+    pub fn verify(verifier_data: VerifierCircuitData<F, C, D>, proof: Proof) -> anyhow::Result<()> {
+        let proof_with_public_input = ProofWithPublicInputs {
             proof: proof.proof,
-            public_inputs: self
-                .0
-                .cap
-                .0
-                .iter()
-                .flat_map(|h| h.elements)
+            public_inputs: proof
+                .merkle_root
+                .into_iter()
                 .chain(proof.nullifier)
                 .chain([
                     F::from_canonical_u64(proof.topic_id),
                     F::from_canonical_u32(proof.reputation),
                 ])
                 .collect_vec(),
-        })
+        };
+
+        verifier_data.verify(proof_with_public_input)
     }
 
     pub fn prove_reputation(
         &self,
+        config: CircuitConfig,
         private_key: &[u8],
         topic_id: u64,
         leaf_index: usize,
@@ -73,8 +71,6 @@ impl ReputationSet {
             .collect::<Vec<F>>();
         let nullifier = PoseidonHash::hash_no_pad(&nullifier).elements;
 
-        let mut config = CircuitConfig::wide_ecc_config();
-        config.zero_knowledge = true;
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let mut pw = PartialWitness::new();
 
@@ -88,15 +84,22 @@ impl ReputationSet {
             reputation,
         );
 
+        builder.print_gate_counts(0);
         let data = builder.build();
-        let proof = data.prove(pw)?;
+
+        let mut timer = TimingTree::new("ReputationSet", log::Level::Info);
+        let proof = timed!(timer, "Proving time", data.prove(pw));
+        timer.print();
+
+        let merkle_root = self.0.cap.0[0].elements;
 
         Ok((
             Proof {
                 nullifier,
                 reputation,
-                proof: proof.proof,
+                proof: proof?.proof,
                 topic_id,
+                merkle_root,
             },
             data.verifier_data(),
         ))
@@ -200,19 +203,21 @@ impl ReputationSet {
 
 #[cfg(test)]
 mod tests {
-    use plonky2::plonk::config::Hasher;
+    use plonky2::{plonk::config::Hasher, util::serialization::Write};
     use plonky2_sha512::gadgets::sha512::array_to_bits;
-    use rand::{thread_rng, Rng};
+    use rand::thread_rng;
 
     use super::*;
 
     #[test]
     fn test_set() {
-        let n = 1 << 5;
+        let _ = env_logger::builder().is_test(true).try_init();
+        // 32768
+        let n = 1 << 15;
         let mut csprng = thread_rng();
 
         let private_keys: Vec<_> = (0..n)
-            .map(|i| ed25519_dalek::SecretKey::generate(&mut csprng))
+            .map(|_| ed25519_dalek::SecretKey::generate(&mut csprng))
             .collect();
 
         let leaves: Vec<_> = private_keys
@@ -233,12 +238,16 @@ mod tests {
             .collect();
         let reputatition_set = ReputationSet(MerkleTree::new(leaves, 0));
 
-        let i = 13;
-        let topic = 10;
+        let i = 1000;
+        let topic = 103222;
 
         let (proof, verifier_data) = reputatition_set
             .prove_reputation(&private_keys[i].to_bytes(), topic, i, i as u32)
             .unwrap();
-        reputatition_set.verify(verifier_data, proof).unwrap();
+        let mut data = vec![];
+        data.write_proof(&proof.proof).unwrap();
+        println!("Proof length: {}", data.len());
+
+        ReputationSet::verify(verifier_data, proof).unwrap();
     }
 }

@@ -1,22 +1,18 @@
-use serde_json::json;
-use near_workspaces::{Account, Contract, DevNetwork, Worker};
 use near_sdk::json_types::Base64VecU8;
-use serde::{Deserialize, Serialize};
-use near_sdk::{NearToken, Gas};
 use near_sdk::json_types::U128;
+use near_sdk::{Gas, NearToken};
+use near_workspaces::{Account, Contract, DevNetwork, Worker};
+use serde::{Deserialize, Serialize};
+use serde_json::json;
 
-const VERIFIER_DATA: &str = include_str!("../../../plonky2-reputation/ed25519..verify.json");
-const PROOF: &str = include_str!("../../../plonky2-reputation/ed25519.proof");
+const VERIFIER_DATA: &str =
+    include_str!("../../../plonky2-reputation/reputation_proof.verify.json");
+const PROOF: &str = include_str!("../../../plonky2-reputation/reputation_proof.json");
 
 #[derive(Serialize, Deserialize)]
 struct VerificationData {
     pub common: String,
     pub verifier: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct ProofData {
-    pub proof: String,
 }
 
 pub fn verification_data() -> (Base64VecU8, Base64VecU8) {
@@ -25,11 +21,6 @@ pub fn verification_data() -> (Base64VecU8, Base64VecU8) {
     let verifier = Base64VecU8(near_sdk::base64::decode(data.verifier).unwrap());
 
     return (common, verifier);
-}
-
-pub fn proof_data() -> Base64VecU8 {
-    let data: ProofData = serde_json::from_str(PROOF).unwrap();
-    return Base64VecU8(near_sdk::base64::decode(data.proof).unwrap());
 }
 
 async fn init(
@@ -68,19 +59,21 @@ async fn init(
 #[tokio::test]
 async fn test_verification() -> anyhow::Result<()> {
     let worker = near_workspaces::sandbox().await?;
-    let (contract, alice) = init(&worker, NearToken::from_near(10).as_yoctonear().into()).await.unwrap();
+    let (contract, alice) = init(&worker, NearToken::from_near(10).as_yoctonear().into())
+        .await
+        .unwrap();
 
-    let proof = proof_data();
     println!("{:?}", Gas::from_tgas(300));
     let res = contract
         .call("verify_proof")
         .args_json(json!({
-            "proof": proof,
+            "proof": PROOF,
         }))
         .gas(Gas::from_tgas(300))
         .transact()
         .await
         .unwrap();
+    println!("{:?}", res.logs());
     assert!(res.is_success(), "{:?}", res);
     Ok(())
 }

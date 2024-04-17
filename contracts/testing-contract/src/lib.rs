@@ -4,19 +4,11 @@
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::store::Vector;
-use near_sdk::{env, json_types, log, near_bindgen, BorshStorageKey, PanicOnDefault};
-use plonky2::field::types::Field;
-use plonky2::plonk::circuit_data::{
-    CommonCircuitData, VerifierCircuitData, VerifierOnlyCircuitData,
-};
-use plonky2::plonk::config::{GenericConfig, PoseidonGoldilocksConfig};
-use plonky2::plonk::proof::{CompressedProofWithPublicInputs, ProofWithPublicInputs};
-use plonky2_ed25519::serialization::Ed25519GateSerializer;
-use rand::{RngCore, SeedableRng};
+use near_sdk::{env, json_types, log, near_bindgen, BorshStorageKey, NearSchema, PanicOnDefault};
 
-const D: usize = 2;
-type C = PoseidonGoldilocksConfig;
-type F = <C as GenericConfig<D>>::F;
+use plonky2_reputation::Proof;
+use plonky2_reputation::{prelude::*, Digest};
+use rand::{RngCore, SeedableRng};
 
 #[cfg(target_arch = "wasm32")]
 mod custom_getrandom {
@@ -58,6 +50,17 @@ pub struct Contract {
     verifier_bytes: Vec<u8>,
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize, NearSchema, BorshDeserialize, BorshSerialize)]
+#[borsh(crate = "near_sdk::borsh")]
+#[serde(crate = "near_sdk::serde")]
+pub struct ProofInput {
+    pub proof: Base64VecU8,
+    pub merkle_root: [u64; 4],
+    pub nullifier: [u64; 4],
+    pub reputation: u32,
+    pub topic_id: u64,
+}
+
 // Implement the contract structure
 #[near_bindgen]
 impl Contract {
@@ -70,7 +73,7 @@ impl Contract {
         }
     }
 
-    pub fn verify_proof(&mut self, proof: json_types::Base64VecU8) -> bool {
+    pub fn verify_proof(&mut self, proof: ProofInput) -> bool {
         let common: CommonCircuitData<_, 2> = CommonCircuitData::<F, D>::from_bytes(
             self.common_data_bytes.clone(),
             &Ed25519GateSerializer,
@@ -79,36 +82,18 @@ impl Contract {
 
         let verifier_only =
             VerifierOnlyCircuitData::<C, D>::from_bytes(self.verifier_bytes.clone()).unwrap();
-        let proof = ProofWithPublicInputs::<F, C, D>::from_bytes(proof.0, &common).unwrap();
-
-        // let address = proof
-        //     .public_inputs
-        //     .to_vec()
-        //     .chunks(8)
-        //     .into_iter()
-        //     .map(|chunk| {
-        //         let mut byte = 0u8;
-        //         for (i, bit) in chunk.iter().rev().enumerate() {
-        //             if bit.is_one() {
-        //                 byte |= 1 << i;
-        //             }
-        //         }
-        //         byte
-        //     })
-        //     .collect::<Vec<u8>>();
 
         let verifier = VerifierCircuitData {
             common,
             verifier_only,
         };
-        log!("Used gas: {}", env::used_gas().as_tgas());
-        if let Ok(_) = verifier.verify(proof) {
-            log!("Proof is valid");
 
-            // log!(
-            //     "Proof is valid. Verified address: {}",
-            //     near_sdk::bs58::encode(&address).into_string()
-            // );
+        let reputation = proof.reputation;
+
+        env::log!("Used gas {}", env::used_gas());
+
+        if let Ok(_) = ReputationSet::verify(verifier, proof) {
+            log!("Proof is valid with reputation: {}!", reputation);
             return true;
         }
         return false;

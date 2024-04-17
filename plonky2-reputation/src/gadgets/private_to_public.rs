@@ -1,5 +1,4 @@
 use plonky2::{
-    gates::public_input,
     iop::{
         target::BoolTarget,
         witness::{PartialWitness, WitnessWrite},
@@ -123,7 +122,6 @@ mod test {
             .public_inputs
             .to_vec()
             .chunks(8)
-            .into_iter()
             .map(|chunk| {
                 let mut byte = 0u8;
                 for (i, bit) in chunk.iter().rev().enumerate() {

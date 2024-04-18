@@ -5,19 +5,16 @@ use anyhow::Result;
 use clap::Parser;
 use ed25519_dalek::{PublicKey, SecretKey};
 use itertools::Itertools;
-use log::{info, LevelFilter};
-use plonky2::field::extension::Extendable;
+use log::LevelFilter;
 use plonky2::field::types::Field;
-use plonky2::hash::hash_types::RichField;
 use plonky2::hash::merkle_tree::MerkleTree;
 use plonky2::hash::poseidon::PoseidonHash;
-use plonky2::plonk::circuit_data::{CircuitConfig, CommonCircuitData, VerifierOnlyCircuitData};
-use plonky2::plonk::config::{GenericConfig, Hasher};
-use plonky2::plonk::proof::{CompressedProofWithPublicInputs, ProofWithPublicInputs};
+use plonky2::plonk::circuit_data::CircuitConfig;
+use plonky2::plonk::config::Hasher;
 use plonky2_ed25519::serialization::Ed25519GateSerializer;
+use plonky2_reputation::gadgets::reputation_list::ReputationSet;
+use plonky2_reputation::F;
 use plonky2_sha512::gadgets::sha512::array_to_bits;
-use plonky_reputation::gadgets::reputation_list::ReputationSet;
-use plonky_reputation::F;
 use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
@@ -34,6 +31,9 @@ struct Cli {
 
     #[arg(short, long)]
     topic_id: u64,
+
+    #[arg(short, long)]
+    expected_rep: u32,
 
     #[arg(short, long, default_value = "./merkle_path.json")]
     merkle_tree: PathBuf,
@@ -137,6 +137,7 @@ fn main() -> Result<()> {
         args.topic_id,
         leaf_index,
         reputation,
+        args.expected_rep,
     )?;
 
     save_data(

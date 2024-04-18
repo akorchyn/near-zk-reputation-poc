@@ -14,6 +14,9 @@ use plonky2::{
     },
     iop::target::{BoolTarget, Target},
 };
+use plonky2_crypto::u32::arithmetic_u32::{CircuitBuilderU32, U32Target};
+use plonky2_crypto::u32::multiple_comparison::list_le_u32_circuit;
+use plonky2_crypto::u32::witness::WitnessU32;
 use plonky2_ed25519::gadgets::eddsa::bits_in_le;
 use plonky2_sha512::gadgets::sha512::array_to_bits;
 
@@ -28,8 +31,9 @@ pub struct ReputationTargets {
     merkle_proof: MerkleProofTarget,
 
     private_key: Vec<BoolTarget>,
-    // 32 bits
-    reputation: Target,
+    reputation: U32Target,
+    expected_reputation: U32Target,
+
     topic_id: Target,
 
     leaf_index: Target,
@@ -45,7 +49,7 @@ impl ReputationSet {
                 .chain(proof.nullifier)
                 .chain([
                     F::from_canonical_u64(proof.topic_id),
-                    F::from_canonical_u32(proof.reputation),
+                    F::from_canonical_u32(proof.expected_reputation),
                 ])
                 .collect_vec(),
         };
@@ -60,6 +64,7 @@ impl ReputationSet {
         topic_id: u64,
         leaf_index: usize,
         reputation: u32,
+        expected_reputation: u32,
     ) -> anyhow::Result<(Proof, VerifierCircuitData<F, C, D>)> {
         let nullifier = array_to_bits(private_key)
             .into_iter()
@@ -82,9 +87,9 @@ impl ReputationSet {
             topic_id,
             leaf_index,
             reputation,
+            expected_reputation,
         );
 
-        builder.print_gate_counts(0);
         let data = builder.build();
 
         let mut timer = TimingTree::new("ReputationSet", log::Level::Info);
@@ -96,7 +101,7 @@ impl ReputationSet {
         Ok((
             Proof {
                 nullifier,
-                reputation,
+                expected_reputation,
                 proof: proof?.proof,
                 topic_id,
                 merkle_root,
@@ -117,8 +122,8 @@ impl ReputationSet {
         builder.register_public_inputs(&nullifier.elements);
         let topic_id = builder.add_virtual_target();
         builder.register_public_input(topic_id);
-        let reputation = builder.add_virtual_target();
-        builder.register_public_input(reputation);
+        let expected_reputation = builder.add_virtual_u32_target();
+        builder.register_public_input(expected_reputation.0);
 
         // Merkle proof
         let merkle_proof = MerkleProofTarget {
@@ -132,12 +137,24 @@ impl ReputationSet {
         let leaf_index = builder.add_virtual_target();
         let leaf_index_bits = builder.split_le(leaf_index, self.tree_height());
 
+        // User reputation is private, but user can prove that he has at least X reputation
+        let reputation = builder.add_virtual_u32_target();
+
+        // Verify that user has more than X reputation
+        let expected_is_le = list_le_u32_circuit(
+            builder,
+            [expected_reputation].to_vec(),
+            [reputation].to_vec(),
+        );
+        let true_stm = builder._true();
+        builder.connect(expected_is_le.target, true_stm.target);
+
         // Verify the merkle proof
         builder.verify_merkle_proof::<PoseidonHash>(
             pk_bits
                 .iter()
                 .map(|e| e.target)
-                .chain([reputation])
+                .chain([reputation.0])
                 .collect_vec(),
             &leaf_index_bits,
             merkle_root,
@@ -149,7 +166,7 @@ impl ReputationSet {
                 .priv_key
                 .iter()
                 .map(|e: &BoolTarget| e.target)
-                .chain([topic_id, reputation])
+                .chain([topic_id, reputation.0])
                 .collect_vec(),
         );
         builder.connect_hashes(should_be_nullifier, nullifier);
@@ -161,6 +178,7 @@ impl ReputationSet {
             reputation,
             leaf_index,
             merkle_proof,
+            expected_reputation,
         }
     }
 
@@ -172,6 +190,7 @@ impl ReputationSet {
         topic_id: u64,
         leaf_index: usize,
         reputation: u32,
+        expected_reputation: u32,
     ) {
         assert_eq!(private_key.len(), 32);
 
@@ -182,10 +201,12 @@ impl ReputationSet {
             private_key: private_key_target,
             reputation: reputation_target,
             leaf_index: leaf_index_target,
+            expected_reputation: expected_reputation_target,
         } = targets;
 
         pw.set_hash_target(merkle_root, self.0.cap.0[0]);
-        pw.set_target(reputation_target, F::from_canonical_u32(reputation));
+        pw.set_u32_target(reputation_target, reputation);
+        pw.set_u32_target(expected_reputation_target, expected_reputation);
         pw.set_target(leaf_index_target, F::from_canonical_usize(leaf_index));
         pw.set_target(topic_id_target, F::from_canonical_u64(topic_id));
         PrivateToPublic::fill_circuit(pw, private_key, private_key_target);
@@ -240,9 +261,19 @@ mod tests {
 
         let i = 1000;
         let topic = 103222;
+        let expected_rep = 500;
 
+        let mut config = CircuitConfig::wide_ecc_config();
+        config.zero_knowledge = true;
         let (proof, verifier_data) = reputatition_set
-            .prove_reputation(&private_keys[i].to_bytes(), topic, i, i as u32)
+            .prove_reputation(
+                config,
+                &private_keys[i].to_bytes(),
+                topic,
+                i,
+                i as u32,
+                expected_rep,
+            )
             .unwrap();
         let mut data = vec![];
         data.write_proof(&proof.proof).unwrap();

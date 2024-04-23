@@ -3,7 +3,6 @@ use plonky2::field::types::Field;
 use plonky2::iop::witness::{PartialWitness, WitnessWrite};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{CircuitConfig, VerifierCircuitData};
-use plonky2::plonk::config::Hasher;
 use plonky2::plonk::proof::ProofWithPublicInputs;
 use plonky2::timed;
 use plonky2::util::timing::TimingTree;
@@ -12,25 +11,37 @@ use plonky2::{
         hash_types::HashOutTarget, merkle_proofs::MerkleProofTarget, merkle_tree::MerkleTree,
         poseidon::PoseidonHash,
     },
-    iop::target::{BoolTarget, Target},
+    iop::target::Target,
 };
-use plonky2_crypto::u32::arithmetic_u32::{CircuitBuilderU32, U32Target};
-use plonky2_crypto::u32::multiple_comparison::list_le_u32_circuit;
-use plonky2_crypto::u32::witness::WitnessU32;
-use plonky2_ed25519::gadgets::eddsa::bits_in_le;
-use plonky2_sha512::gadgets::sha512::array_to_bits;
+use plonky2_sha512_u32::types::HashInputTarget;
+use plonky2_u32::gadgets::arithmetic_u32::{CircuitBuilderU32, U32Target};
+use plonky2_u32::gadgets::multiple_comparison::list_le_u32_circuit;
+use plonky2_u32::witness::WitnessU32;
 
 use crate::{Proof, C, D, F};
 
+use super::common::bits_in_le;
 use super::private_to_public::PrivateToPublic;
 
 pub struct ReputationSet(pub MerkleTree<F, PoseidonHash>);
+
+pub fn array_to_bits(bytes: &[u8]) -> Vec<bool> {
+    let len = bytes.len();
+    let mut ret = Vec::new();
+    for byte in bytes.iter().take(len) {
+        for j in 0..8 {
+            let b = (*byte >> (7 - j)) & 1;
+            ret.push(b == 1);
+        }
+    }
+    ret
+}
 
 pub struct ReputationTargets {
     merkle_root: HashOutTarget,
     merkle_proof: MerkleProofTarget,
 
-    private_key: Vec<BoolTarget>,
+    private_key: HashInputTarget,
     reputation: U32Target,
     expected_reputation: U32Target,
 
@@ -40,8 +51,8 @@ pub struct ReputationTargets {
 }
 
 impl ReputationSet {
-    pub fn verify(verifier_data: VerifierCircuitData<F, C, D>, proof: Proof) -> anyhow::Result<()> {
-        let proof_with_public_input = ProofWithPublicInputs {
+    pub fn proof_with_public_inputs(proof: Proof) -> ProofWithPublicInputs<F, C, D> {
+        ProofWithPublicInputs {
             proof: proof.proof,
             public_inputs: proof
                 .merkle_root
@@ -52,8 +63,18 @@ impl ReputationSet {
                     F::from_canonical_u32(proof.expected_reputation),
                 ])
                 .collect_vec(),
-        };
+        }
+    }
 
+    pub fn verify(verifier_data: VerifierCircuitData<F, C, D>, proof: Proof) -> anyhow::Result<()> {
+        let proof_with_public_input = Self::proof_with_public_inputs(proof);
+        Self::verify_prepared(verifier_data, proof_with_public_input)
+    }
+
+    pub fn verify_prepared(
+        verifier_data: VerifierCircuitData<F, C, D>,
+        proof_with_public_input: ProofWithPublicInputs<F, C, D>,
+    ) -> anyhow::Result<()> {
         verifier_data.verify(proof_with_public_input)
     }
 
@@ -66,16 +87,6 @@ impl ReputationSet {
         reputation: u32,
         expected_reputation: u32,
     ) -> anyhow::Result<(Proof, VerifierCircuitData<F, C, D>)> {
-        let nullifier = array_to_bits(private_key)
-            .into_iter()
-            .map(F::from_bool)
-            .chain([
-                F::from_canonical_u64(topic_id),
-                F::from_canonical_u32(reputation),
-            ])
-            .collect::<Vec<F>>();
-        let nullifier = PoseidonHash::hash_no_pad(&nullifier).elements;
-
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let mut pw = PartialWitness::new();
 
@@ -93,16 +104,17 @@ impl ReputationSet {
         let data = builder.build();
 
         let mut timer = TimingTree::new("ReputationSet", log::Level::Info);
-        let proof = timed!(timer, "Proving time", data.prove(pw));
+        let proof = timed!(timer, "Proving time", data.prove(pw))?;
         timer.print();
 
+        let nullifier: [F; 4] = proof.public_inputs[4..8].try_into().unwrap();
         let merkle_root = self.0.cap.0[0].elements;
 
         Ok((
             Proof {
                 nullifier,
                 expected_reputation,
-                proof: proof?.proof,
+                proof: proof.proof,
                 topic_id,
                 merkle_root,
             },
@@ -164,8 +176,9 @@ impl ReputationSet {
         let should_be_nullifier = builder.hash_n_to_hash_no_pad::<PoseidonHash>(
             priv_to_pub
                 .priv_key
+                .input
                 .iter()
-                .map(|e: &BoolTarget| e.target)
+                .flat_map(|e| [e.hi.0, e.lo.0])
                 .chain([topic_id, reputation.0])
                 .collect_vec(),
         );
@@ -225,7 +238,6 @@ impl ReputationSet {
 #[cfg(test)]
 mod tests {
     use plonky2::{plonk::config::Hasher, util::serialization::Write};
-    use plonky2_sha512::gadgets::sha512::array_to_bits;
     use rand::thread_rng;
 
     use super::*;

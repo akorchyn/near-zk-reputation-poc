@@ -8,10 +8,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-plonky2.workspace = true
-plonky2_sha512 = { git = "https://github.com/Electron-Labs/plonky2_sha512" }
-plonky2_crypto = { git = "https://github.com/Electron-Labs/plonky2-crypto" }
-plonky2_ed25519.workspace = true
+plonky2 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_u32 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_ecdsa = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_sha512_u32 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
+plonky2_ed25519 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
+plonky2_bn128 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
+
+
 itertools = { version = "0.11.0", default-features = false }
 serde = { version = "1.0", default-features = false, features = [
     "derive",
@@ -26,6 +30,7 @@ log = "0.4"
 env_logger = "0.11"
 ed25519-dalek = "1.0"
 rand = { version = "0.7", default-features = false }
+num = { version = "0.4", features = ["rand"] }
 
 [dev-dependencies]
 hex-literal = "0.4"

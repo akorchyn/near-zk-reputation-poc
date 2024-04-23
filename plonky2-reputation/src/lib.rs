@@ -1,9 +1,12 @@
 use plonky2::{field::goldilocks_field::GoldilocksField, plonk::config::PoseidonGoldilocksConfig};
+use plonky2_bn128::config::PoseidonBN128GoldilocksConfig;
 use serde::{Deserialize, Serialize};
 
 pub const D: usize = 2;
 pub type C = PoseidonGoldilocksConfig;
 pub type F = GoldilocksField;
+// Recursive
+pub type Cbn128 = PoseidonBN128GoldilocksConfig;
 pub type Digest = [F; 4];
 pub type PlonkProof = plonky2::plonk::proof::Proof<F, C, D>;
 
@@ -16,9 +19,8 @@ pub mod prelude {
     };
     pub use plonky2::plonk::config::{GenericConfig, PoseidonGoldilocksConfig};
     pub use plonky2::plonk::proof::{CompressedProofWithPublicInputs, ProofWithPublicInputs};
-    pub use plonky2_ed25519::serialization::Ed25519GateSerializer;
 
-    pub use crate::{gadgets::reputation_list::ReputationSet, C, D, F};
+    // pub use crate::{gadgets::reputation_list::ReputationSet, C, D, F};
 }
 
 #[cfg(test)]

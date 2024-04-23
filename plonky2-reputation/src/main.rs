@@ -5,16 +5,25 @@ use anyhow::Result;
 use clap::Parser;
 use ed25519_dalek::{PublicKey, SecretKey};
 use itertools::Itertools;
-use log::LevelFilter;
+use log::{info, Level, LevelFilter};
+use plonky2::field::extension::Extendable;
 use plonky2::field::types::Field;
+use plonky2::hash::hash_types::RichField;
 use plonky2::hash::merkle_tree::MerkleTree;
 use plonky2::hash::poseidon::PoseidonHash;
-use plonky2::plonk::circuit_data::CircuitConfig;
-use plonky2::plonk::config::Hasher;
-use plonky2_ed25519::serialization::Ed25519GateSerializer;
-use plonky2_reputation::gadgets::reputation_list::ReputationSet;
-use plonky2_reputation::F;
-use plonky2_sha512::gadgets::sha512::array_to_bits;
+use plonky2::iop::target::Target;
+use plonky2::iop::witness::{PartialWitness, WitnessWrite};
+use plonky2::plonk::circuit_builder::CircuitBuilder;
+use plonky2::plonk::circuit_data::{
+    CircuitConfig, CircuitData, CommonCircuitData, VerifierCircuitData, VerifierCircuitTarget,
+    VerifierOnlyCircuitData,
+};
+use plonky2::plonk::config::{AlgebraicHasher, GenericConfig, Hasher};
+use plonky2::plonk::proof::ProofWithPublicInputs;
+use plonky2::plonk::prover::prove;
+use plonky2::util::timing::TimingTree;
+use plonky2_reputation::gadgets::reputation_list::{array_to_bits, ReputationSet};
+use plonky2_reputation::{Cbn128, C, D, F};
 use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
@@ -23,8 +32,8 @@ use std::path::PathBuf;
 
 #[derive(Parser)]
 struct Cli {
-    #[arg(short, long, default_value = "./reputation_proof.json")]
-    output_path: PathBuf,
+    #[arg(short, long, default_value = "./output")]
+    directory: PathBuf,
 
     #[arg(short, long)]
     private: String,
@@ -104,6 +113,50 @@ fn load_merkle_tree(
     Ok((ReputationSet(MerkleTree::new(leaves, 0)), data))
 }
 
+pub fn recursive_proof<F, C, InnerC, const D: usize>(
+    inner_common: &CommonCircuitData<F, D>,
+    inner_verifier: &VerifierOnlyCircuitData<InnerC, D>,
+    inner_proof: &ProofWithPublicInputs<F, InnerC, D>,
+) -> Result<(CircuitData<F, C, D>, ProofWithPublicInputs<F, C, D>)>
+where
+    F: RichField + Extendable<D>,
+    C: GenericConfig<D, F = F>,
+    InnerC: GenericConfig<D, F = F>,
+    InnerC::Hasher: AlgebraicHasher<F>,
+    [(); C::Hasher::HASH_SIZE]:,
+{
+    let mut builder = CircuitBuilder::<F, D>::new(CircuitConfig::standard_recursion_config());
+    let proof_with_pis_target = builder.add_virtual_proof_with_pis(inner_common);
+    builder.register_public_inputs(&proof_with_pis_target.public_inputs);
+    let verifier_circuit_target = VerifierCircuitTarget {
+        constants_sigmas_cap: builder.add_virtual_cap(inner_common.config.fri_config.cap_height),
+        circuit_digest: builder.add_virtual_hash(),
+    };
+    let mut pw = PartialWitness::new();
+    pw.set_proof_with_pis_target(&proof_with_pis_target, inner_proof);
+    pw.set_cap_target(
+        &verifier_circuit_target.constants_sigmas_cap,
+        &inner_verifier.constants_sigmas_cap,
+    );
+    pw.set_hash_target(
+        verifier_circuit_target.circuit_digest,
+        inner_verifier.circuit_digest,
+    );
+    builder.verify_proof::<InnerC>(
+        &proof_with_pis_target,
+        &verifier_circuit_target,
+        inner_common,
+    );
+
+    let data_new = builder.build::<C>();
+    let mut timing = TimingTree::new("prove", Level::Debug);
+    let proof_new: ProofWithPublicInputs<F, C, D> =
+        prove(&data_new.prover_only, &data_new.common, pw, &mut timing)?;
+    timing.print();
+
+    Ok((data_new, proof_new))
+}
+
 fn main() -> Result<()> {
     // Initialize logging
     let mut builder = env_logger::Builder::from_default_env();
@@ -112,6 +165,8 @@ fn main() -> Result<()> {
     builder.try_init()?;
 
     let args = Cli::parse();
+
+    std::fs::create_dir_all(&args.directory)?;
 
     let mut config = CircuitConfig::wide_ecc_config();
     config.zero_knowledge = true;
@@ -140,28 +195,52 @@ fn main() -> Result<()> {
         args.expected_rep,
     )?;
 
-    save_data(
-        serde_json::to_string(&proof)?,
-        args.output_path.to_str().unwrap(),
+    let proof = ReputationSet::proof_with_public_inputs(proof);
+    let (cd, proof) = recursive_proof::<F, Cbn128, C, D>(
+        &verification.common,
+        &verification.verifier_only,
+        &proof,
     )?;
 
     save_data(
-        serde_json::to_string(&VerificationData {
-            common: base64::encode(
-                verification
-                    .common
-                    .to_bytes(&Ed25519GateSerializer)
-                    .unwrap(),
-            ),
-            verifier: base64::encode(verification.to_bytes(&Ed25519GateSerializer).unwrap()),
-        })?,
-        args.output_path
-            .with_extension("verify.json")
+        serde_json::to_string_pretty(&proof)?,
+        args.directory
+            .join("proof_with_public_inputs.json")
             .to_str()
             .unwrap(),
     )?;
 
-    ReputationSet::verify(verification, proof)?;
+    save_data(
+        serde_json::to_string_pretty(&cd.verifier_only)?,
+        args.directory
+            .join("verifier_only_circuit_data.json")
+            .to_str()
+            .unwrap(),
+    )?;
+
+    save_data(
+        serde_json::to_string_pretty(&cd.common)?,
+        args.directory
+            .join("common_circuit_data.json")
+            .to_str()
+            .unwrap(),
+    )?;
+
+    // save_data(
+    //     serde_json::to_string(&VerificationData {
+    //         common: base64::encode(
+    //             verification
+    //                 .common
+    //                 .to_bytes(&Ed25519GateSerializer)
+    //                 .unwrap(),
+    //         ),
+    //         verifier: base64::encode(verification.to_bytes(&Ed25519GateSerializer).unwrap()),
+    //     })?,
+    //     args.output_path
+    //         .with_extension("verify.json")
+    //         .to_str()
+    //         .unwrap(),
+    // )?;
 
     Ok(())
 }

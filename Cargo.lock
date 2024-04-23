@@ -40,7 +40,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e01ed3140b2f8d422c68afa1ed2e85d996ea619c988ac834d255db32138655cb"
 dependencies = [
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -61,7 +61,7 @@ checksum = "7c7db3d5a9718568e4cf4a537cfd7070e6e6ff7481510d0237fb529ac850f6d3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -197,6 +197,179 @@ dependencies = [
 ]
 
 [[package]]
+name = "ark-bn254"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a22f4561524cd949590d78d7d4c5df8f592430d221f7f3c9497bbafd8972120f"
+dependencies = [
+ "ark-ec",
+ "ark-ff",
+ "ark-std",
+]
+
+[[package]]
+name = "ark-crypto-primitives"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f3a13b34da09176a8baba701233fdffbaa7c1b1192ce031a3da4e55ce1f1a56"
+dependencies = [
+ "ark-ec",
+ "ark-ff",
+ "ark-relations",
+ "ark-serialize",
+ "ark-snark",
+ "ark-std",
+ "blake2 0.10.6",
+ "derivative",
+ "digest 0.10.7",
+ "sha2 0.10.8",
+]
+
+[[package]]
+name = "ark-ec"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "defd9a439d56ac24968cca0571f598a61bc8c55f71d50a89cda591cb750670ba"
+dependencies = [
+ "ark-ff",
+ "ark-poly",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "hashbrown 0.13.2",
+ "itertools 0.10.5",
+ "num-traits",
+ "zeroize",
+]
+
+[[package]]
+name = "ark-ff"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec847af850f44ad29048935519032c33da8aa03340876d351dfab5660d2966ba"
+dependencies = [
+ "ark-ff-asm",
+ "ark-ff-macros",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "digest 0.10.7",
+ "itertools 0.10.5",
+ "num-bigint 0.4.4",
+ "num-traits",
+ "paste",
+ "rustc_version",
+ "zeroize",
+]
+
+[[package]]
+name = "ark-ff-asm"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3ed4aa4fe255d0bc6d79373f7e31d2ea147bcf486cba1be5ba7ea85abdb92348"
+dependencies = [
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "ark-ff-macros"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7abe79b0e4288889c4574159ab790824d0033b9fdcb2a112a3182fac2e514565"
+dependencies = [
+ "num-bigint 0.4.4",
+ "num-traits",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "ark-groth16"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "20ceafa83848c3e390f1cbf124bc3193b3e639b3f02009e0e290809a501b95fc"
+dependencies = [
+ "ark-crypto-primitives",
+ "ark-ec",
+ "ark-ff",
+ "ark-poly",
+ "ark-relations",
+ "ark-serialize",
+ "ark-std",
+]
+
+[[package]]
+name = "ark-poly"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d320bfc44ee185d899ccbadfa8bc31aab923ce1558716e1997a1e74057fe86bf"
+dependencies = [
+ "ark-ff",
+ "ark-serialize",
+ "ark-std",
+ "derivative",
+ "hashbrown 0.13.2",
+]
+
+[[package]]
+name = "ark-relations"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00796b6efc05a3f48225e59cb6a2cda78881e7c390872d5786aaf112f31fb4f0"
+dependencies = [
+ "ark-ff",
+ "ark-std",
+ "tracing",
+]
+
+[[package]]
+name = "ark-serialize"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "adb7b85a02b83d2f22f89bd5cac66c9c89474240cb6207cb1efc16d098e822a5"
+dependencies = [
+ "ark-serialize-derive",
+ "ark-std",
+ "digest 0.10.7",
+ "num-bigint 0.4.4",
+]
+
+[[package]]
+name = "ark-serialize-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae3281bc6d0fd7e549af32b52511e1302185bd688fd3359fa36423346ff682ea"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "ark-snark"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "84d3cc6833a335bb8a600241889ead68ee89a3cf8448081fb7694c0fe503da63"
+dependencies = [
+ "ark-ff",
+ "ark-relations",
+ "ark-serialize",
+ "ark-std",
+]
+
+[[package]]
+name = "ark-std"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94893f1e0c6eeab764ade8dc4c0db24caf4fe7cbbaafc0eba0a9030f447b5185"
+dependencies = [
+ "num-traits",
+ "rand 0.8.5",
+]
+
+[[package]]
 name = "assert_matches"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -221,7 +394,7 @@ checksum = "16e62a023e7c117e27523144c5d2459f4397fcc3cab0085af8e2224f643a0193"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -232,7 +405,18 @@ checksum = "c6fa2087f2753a7da8cc1c0dbfcf89579dd57458e36769de5ac750b4671737ca"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
+]
+
+[[package]]
+name = "atty"
+version = "0.2.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9b39be18770d11421cdb1b9947a45dd3f37e93092cbf377614828a319d5fee8"
+dependencies = [
+ "hermit-abi 0.1.19",
+ "libc",
+ "winapi",
 ]
 
 [[package]]
@@ -310,6 +494,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "blake2"
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46502ad458c9a52b69d4d4d32775c788b7a1b85e8bc9d482d92250fc0e3f8efe"
+dependencies = [
+ "digest 0.10.7",
+]
+
+[[package]]
 name = "block-buffer"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -347,7 +540,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
  "syn_derive",
 ]
 
@@ -371,6 +564,26 @@ name = "bumpalo"
 version = "3.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
+
+[[package]]
+name = "bytemuck"
+version = "1.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d6d68c57235a3a081186990eca2867354726650f42f7516ca50c28d6281fd15"
+dependencies = [
+ "bytemuck_derive",
+]
+
+[[package]]
+name = "bytemuck_derive"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4da9a32f3fed317401fa3c862968128267c3106685286e15d5aaa3d7389c2f60"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.60",
+]
 
 [[package]]
 name = "byteorder"
@@ -526,7 +739,7 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -540,6 +753,12 @@ name = "colorchoice"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
+
+[[package]]
+name = "const-oid"
+version = "0.9.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 
 [[package]]
 name = "const-random"
@@ -691,6 +910,19 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
+version = "4.0.0-rc.1"
+source = "git+https://github.com/EkaterynaKuznetsova/curve25519-dalek?rev=9f0cf559de8be0edee3af19f46e4804343d90a70#9f0cf559de8be0edee3af19f46e4804343d90a70"
+dependencies = [
+ "cfg-if 1.0.0",
+ "fiat-crypto 0.1.20",
+ "packed_simd_2",
+ "platforms",
+ "subtle",
+ "zeroize",
+]
+
+[[package]]
+name = "curve25519-dalek"
 version = "4.0.0"
 source = "git+https://github.com/Electron-Labs/curve25519-dalek#fd71e1a4f0f36a7e3590177e999ca72b9c41ba42"
 dependencies = [
@@ -729,7 +961,7 @@ source = "git+https://github.com/Electron-Labs/curve25519-dalek#fd71e1a4f0f36a7e
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -740,7 +972,7 @@ checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -764,7 +996,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "strsim 0.10.0",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -775,7 +1007,7 @@ checksum = "a668eda54683121533a393014d8692171709ff57a7d61f187b6e782719f8933f"
 dependencies = [
  "darling_core",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -789,6 +1021,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "derivative"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fcc3dd5e9e9c0b295d6e1e4d811fb6f157d5ffd784b8d202fc62eac8035a770b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "derive_arbitrary"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -796,7 +1039,7 @@ checksum = "67e77553c4162a157adbf834ebae5b415acbecbeafc7a74b0e886657506a7611"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -828,8 +1071,43 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
 dependencies = [
  "block-buffer 0.10.4",
+ "const-oid",
  "crypto-common",
+ "subtle",
 ]
+
+[[package]]
+name = "downcast-rs"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75b325c5dbd37f80359721ad39aca5a29fb04c89279657cffdda8736d0c0b9d2"
+
+[[package]]
+name = "dyn-clonable"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e9232f0e607a262ceb9bd5141a3dfb3e4db6994b31989bbfd845878cba59fd4"
+dependencies = [
+ "dyn-clonable-impl",
+ "dyn-clone",
+]
+
+[[package]]
+name = "dyn-clonable-impl"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "558e40ea573c374cf53507fd240b7ee2f5477df7cfebdb97323ec61c719399c5"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "dyn-clone"
+version = "1.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d6ef0072f8a535281e4876be788938b528e9a1d43900b82c2569af7da799125"
 
 [[package]]
 name = "easy-ext"
@@ -889,6 +1167,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a47c1c47d2f5964e29c61246e81db715514cd532db6b5116a25ea3c03d6780a2"
 
 [[package]]
+name = "elf"
+version = "0.7.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4445909572dbd556c457c849c4ca58623d84b27c8fff1e74b0b4227d8b90d17b"
+
+[[package]]
 name = "enum-map"
 version = "2.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -905,7 +1189,7 @@ checksum = "f282cfdfe92516eb26c2af8589c274c7c17681f5ecc03c18255fe741c6aa64eb"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -924,7 +1208,11 @@ version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a12e6657c4c97ebab115a42dcee77225f7f482cdd841cf7088c657a42e9e00e7"
 dependencies = [
+ "atty",
+ "humantime",
  "log",
+ "regex",
+ "termcolor",
 ]
 
 [[package]]
@@ -1048,6 +1336,7 @@ checksum = "645c6916888f6cb6350d2550b80fb63e734897a8498abe35cfb732b6487804b0"
 dependencies = [
  "futures-channel",
  "futures-core",
+ "futures-executor",
  "futures-io",
  "futures-sink",
  "futures-task",
@@ -1088,6 +1377,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a44623e20b9681a318efdd71c299b6b222ed6f231972bfe2f224ebad6311f0c1"
 
 [[package]]
+name = "futures-macro"
+version = "0.3.30"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.60",
+]
+
+[[package]]
 name = "futures-sink"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1100,6 +1400,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "38d84fa142264698cdce1a9f9172cf383a0c82de1bddcf3092901442c4097004"
 
 [[package]]
+name = "futures-timer"
+version = "3.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f288b0a4f20f9a56b5d1da57e2227c661b7b16168e2f72365f57b63326e29b24"
+
+[[package]]
 name = "futures-util"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1108,6 +1414,7 @@ dependencies = [
  "futures-channel",
  "futures-core",
  "futures-io",
+ "futures-macro",
  "futures-sink",
  "futures-task",
  "memchr",
@@ -1144,8 +1451,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94b22e06ecb0110981051723910cbf0b5f5e09a2062dd7663334ee79a9d1286c"
 dependencies = [
  "cfg-if 1.0.0",
+ "js-sys",
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -1197,6 +1506,15 @@ checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
 
 [[package]]
 name = "hashbrown"
+version = "0.13.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "43a3c133739dddd0d2990f9a4bdf8eb4b21ef50e4851ca85ab661199821d510e"
+dependencies = [
+ "ahash",
+]
+
+[[package]]
+name = "hashbrown"
 version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "290f1a1d9242c78d09ce40a5e87e7554ee637af1351968159f4952f028f75604"
@@ -1226,6 +1544,15 @@ name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
+
+[[package]]
+name = "hermit-abi"
+version = "0.1.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "62b467343b94ba476dcb2500d242dadbb39557df889310ac77c5d99100aaac33"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "hermit-abi"
@@ -1390,7 +1717,7 @@ version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f23ff5ef2b80d608d61efee834934d862cd92461afc0560dedf493e4c033738b"
 dependencies = [
- "hermit-abi",
+ "hermit-abi 0.3.9",
  "libc",
  "windows-sys 0.52.0",
 ]
@@ -1489,6 +1816,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
+name = "libm"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fc7aa29613bd6a620df431842069224d8bc9011086b1db4c0e0cd47fa03ec9a"
+
+[[package]]
+name = "libm"
+version = "0.2.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ec2a862134d2a7d32d7983ddcdd1c4923530833c9f2ea1a44fc5fa473989058"
+
+[[package]]
 name = "linux-raw-sys"
 version = "0.4.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1583,6 +1922,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "near-bigint"
+version = "1.0.1"
+dependencies = [
+ "near-sdk",
+ "paste",
+ "rstest",
+ "uint",
+]
+
+[[package]]
 name = "near-config-utils"
 version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1600,7 +1949,7 @@ version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2991d2912218a80ec0733ac87f84fa803accea105611eea209d4419271957667"
 dependencies = [
- "blake2",
+ "blake2 0.9.2",
  "borsh",
  "bs58 0.4.0",
  "c2-chacha",
@@ -1759,7 +2108,7 @@ checksum = "80fca203c51edd9595ec14db1d13359fb9ede32314990bf296b6c5c4502f6ab7"
 dependencies = [
  "quote",
  "serde",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -1771,7 +2120,7 @@ dependencies = [
  "fs2",
  "near-rpc-error-core",
  "serde",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -1813,7 +2162,7 @@ dependencies = [
  "serde_json",
  "strum 0.26.2",
  "strum_macros 0.26.2",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -1866,6 +2215,15 @@ dependencies = [
  "thiserror",
  "tracing",
  "zeropool-bn",
+]
+
+[[package]]
+name = "near_groth16_verifier"
+version = "1.0.1"
+dependencies = [
+ "near-bigint",
+ "near-sdk",
+ "rstest",
 ]
 
 [[package]]
@@ -1942,6 +2300,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
 
 [[package]]
+name = "num-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.60",
+]
+
+[[package]]
 name = "num-integer"
 version = "0.1.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2001,7 +2370,7 @@ version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4161fcb6d602d4d2081af7c3a45852d875a03dd337a6bfdd6e06407b61342a43"
 dependencies = [
- "hermit-abi",
+ "hermit-abi 0.3.9",
  "libc",
 ]
 
@@ -2087,6 +2456,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
 
 [[package]]
+name = "packed_simd_2"
+version = "0.3.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1914cd452d8fccd6f9db48147b29fd4ae05bea9dc5d9ad578509f72415de282"
+dependencies = [
+ "cfg-if 1.0.0",
+ "libm 0.1.4",
+]
+
+[[package]]
 name = "parking_lot"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2108,6 +2487,12 @@ dependencies = [
  "smallvec",
  "windows-targets 0.48.5",
 ]
+
+[[package]]
+name = "paste"
+version = "1.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 
 [[package]]
 name = "percent-encoding"
@@ -2142,7 +2527,7 @@ checksum = "2f38a4412a78282e09a2cf38d195ea5420d15ba0602cb375210efbc877243965"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -2169,22 +2554,19 @@ version = "0.1.4"
 dependencies = [
  "ahash",
  "anyhow",
- "borsh",
  "criterion",
  "env_logger 0.9.3",
- "ff",
+ "getrandom 0.2.14",
  "hashbrown 0.14.3",
  "itertools 0.11.0",
  "jemallocator",
  "keccak-hash",
- "lazy_static",
  "log",
- "near-sdk",
  "num",
  "num_cpus",
- "plonky2_field",
+ "plonky2_field 0.1.1",
  "plonky2_maybe_rayon 0.1.1",
- "plonky2_util",
+ "plonky2_util 0.1.1",
  "rand 0.8.5",
  "rand_chacha 0.3.1",
  "serde",
@@ -2193,6 +2575,57 @@ dependencies = [
  "static_assertions",
  "structopt",
  "tynm",
+ "unroll",
+]
+
+[[package]]
+name = "plonky2"
+version = "0.1.4"
+source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
+dependencies = [
+ "ahash",
+ "anyhow",
+ "ff",
+ "getrandom 0.2.14",
+ "hashbrown 0.14.3",
+ "itertools 0.11.0",
+ "keccak-hash",
+ "lazy_static",
+ "log",
+ "num",
+ "plonky2_field 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
+ "plonky2_maybe_rayon 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
+ "plonky2_util 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "serde",
+ "serde_json",
+ "static_assertions",
+ "unroll",
+]
+
+[[package]]
+name = "plonky2"
+version = "0.1.4"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
+dependencies = [
+ "ahash",
+ "anyhow",
+ "dyn-clonable",
+ "getrandom 0.2.14",
+ "hashbrown 0.14.3",
+ "itertools 0.11.0",
+ "keccak-hash",
+ "log",
+ "num",
+ "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_maybe_rayon 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "serde",
+ "serde_json",
+ "static_assertions",
  "unroll",
 ]
 
@@ -2209,12 +2642,31 @@ dependencies = [
  "hex-literal",
  "itertools 0.11.0",
  "log",
- "plonky2",
- "plonky2_crypto",
- "plonky2_ed25519",
- "plonky2_sha512",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_bn128",
+ "plonky2_ecdsa",
+ "plonky2_ed25519 0.1.0 (git+https://github.com/ZpokenWeb3/zk-light-client-implementation)",
+ "plonky2_sha512_u32",
+ "plonky2_u32",
  "rand 0.7.3",
  "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "plonky2_bn128"
+version = "0.1.0"
+source = "git+https://github.com/ZpokenWeb3/zk-light-client-implementation#bb17d9adbfe2b761c5174e16acff4992d3e02bfa"
+dependencies = [
+ "anyhow",
+ "ff",
+ "lazy_static",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "serde",
+ "serde_derive",
  "serde_json",
 ]
 
@@ -2227,12 +2679,26 @@ dependencies = [
  "hex",
  "itertools 0.11.0",
  "num",
- "plonky2",
+ "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
  "plonky2_maybe_rayon 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.8.5",
  "rayon",
  "serde",
  "serde_with 2.3.3",
+]
+
+[[package]]
+name = "plonky2_ecdsa"
+version = "0.1.0"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
+dependencies = [
+ "anyhow",
+ "itertools 0.10.5",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_maybe_rayon 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "plonky2_u32",
+ "serde",
 ]
 
 [[package]]
@@ -2245,9 +2711,9 @@ dependencies = [
  "itertools 0.11.0",
  "log",
  "num",
- "plonky2",
+ "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
  "plonky2_crypto",
- "plonky2_sha512",
+ "plonky2_sha512 0.1.0 (git+https://github.com/Electron-Labs/plonky2_sha512)",
  "rand 0.8.5",
  "serde",
  "serde_json",
@@ -2255,14 +2721,71 @@ dependencies = [
 ]
 
 [[package]]
+name = "plonky2_ed25519"
+version = "0.1.0"
+source = "git+https://github.com/ZpokenWeb3/zk-light-client-implementation#bb17d9adbfe2b761c5174e16acff4992d3e02bfa"
+dependencies = [
+ "anyhow",
+ "curve25519-dalek 4.0.0-rc.1",
+ "env_logger 0.9.3",
+ "itertools 0.10.5",
+ "keccak-hash",
+ "log",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_ecdsa",
+ "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_sha512 0.1.0 (git+https://github.com/ZpokenWeb3/zk-light-client-implementation)",
+ "plonky2_u32",
+ "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "rayon",
+ "serde",
+ "sha2 0.10.8",
+ "static_assertions",
+ "unroll",
+]
+
+[[package]]
 name = "plonky2_field"
 version = "0.1.1"
+dependencies = [
+ "anyhow",
+ "itertools 0.11.0",
+ "num",
+ "plonky2_util 0.1.1",
+ "rand 0.8.5",
+ "serde",
+ "static_assertions",
+ "unroll",
+]
+
+[[package]]
+name = "plonky2_field"
+version = "0.1.1"
+source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
 dependencies = [
  "anyhow",
  "ff",
  "itertools 0.11.0",
  "num",
- "plonky2_util",
+ "plonky2_util 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
+ "rand 0.8.5",
+ "serde",
+ "static_assertions",
+ "unroll",
+]
+
+[[package]]
+name = "plonky2_field"
+version = "0.1.1"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
+dependencies = [
+ "anyhow",
+ "itertools 0.11.0",
+ "num",
+ "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
  "rand 0.8.5",
  "serde",
  "static_assertions",
@@ -2283,15 +2806,85 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "194db0cbdd974e92d897cd92b74adb3968dc1b967315eb280357c49a7637994e"
 
 [[package]]
+name = "plonky2_maybe_rayon"
+version = "0.1.1"
+source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
+dependencies = [
+ "rayon",
+]
+
+[[package]]
+name = "plonky2_maybe_rayon"
+version = "0.1.1"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
+dependencies = [
+ "rayon",
+]
+
+[[package]]
 name = "plonky2_sha512"
 version = "0.1.0"
 source = "git+https://github.com/Electron-Labs/plonky2_sha512#ede4937f09e4fc80eeeb11fd1e3ebaae135eaa87"
 dependencies = [
  "anyhow",
- "plonky2",
+ "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
  "plonky2_crypto",
  "rand 0.8.5",
  "sha2 0.10.8",
+]
+
+[[package]]
+name = "plonky2_sha512"
+version = "0.1.0"
+source = "git+https://github.com/ZpokenWeb3/zk-light-client-implementation#bb17d9adbfe2b761c5174e16acff4992d3e02bfa"
+dependencies = [
+ "anyhow",
+ "env_logger 0.9.3",
+ "itertools 0.10.5",
+ "keccak-hash",
+ "log",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_ecdsa",
+ "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_u32",
+ "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "rayon",
+ "serde",
+ "sha2 0.10.8",
+ "static_assertions",
+ "unroll",
+]
+
+[[package]]
+name = "plonky2_sha512_u32"
+version = "0.1.0"
+source = "git+https://github.com/ZpokenWeb3/zk-light-client-implementation#bb17d9adbfe2b761c5174e16acff4992d3e02bfa"
+dependencies = [
+ "anyhow",
+ "hex",
+ "itertools 0.10.5",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_maybe_rayon 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_u32",
+ "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "rand 0.8.5",
+ "rayon",
+ "serde",
+]
+
+[[package]]
+name = "plonky2_u32"
+version = "0.1.0"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
+dependencies = [
+ "anyhow",
+ "itertools 0.10.5",
+ "num",
+ "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
 ]
 
 [[package]]
@@ -2300,6 +2893,16 @@ version = "0.1.1"
 dependencies = [
  "rand 0.8.5",
 ]
+
+[[package]]
+name = "plonky2_util"
+version = "0.1.1"
+source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
+
+[[package]]
+name = "plonky2_util"
+version = "0.1.1"
+source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
 
 [[package]]
 name = "powerfmt"
@@ -2623,6 +3226,159 @@ dependencies = [
 ]
 
 [[package]]
+name = "risc0-binfmt"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "elf",
+ "risc0-zkp",
+ "risc0-zkvm-platform",
+ "serde",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-circuit-recursion"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "hex",
+ "risc0-core",
+ "risc0-zkp",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-circuit-rv32im"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "risc0-binfmt",
+ "risc0-core",
+ "risc0-zkp",
+ "risc0-zkvm-platform",
+ "serde",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-core"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "bytemuck",
+ "rand_core 0.6.4",
+]
+
+[[package]]
+name = "risc0-groth16"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "ark-bn254",
+ "ark-groth16",
+ "ark-serialize",
+ "hex",
+ "num-bigint 0.4.4",
+ "num-derive",
+ "risc0-zkp",
+ "serde",
+]
+
+[[package]]
+name = "risc0-zkp"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "blake2 0.10.6",
+ "bytemuck",
+ "digest 0.10.7",
+ "hex",
+ "paste",
+ "rand_core 0.6.4",
+ "risc0-core",
+ "risc0-zkvm-platform",
+ "serde",
+ "sha2 0.10.8",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-zkvm"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "cfg-if 1.0.0",
+ "getrandom 0.2.14",
+ "hex",
+ "risc0-binfmt",
+ "risc0-circuit-recursion",
+ "risc0-circuit-rv32im",
+ "risc0-core",
+ "risc0-groth16",
+ "risc0-zkp",
+ "risc0-zkvm-platform",
+ "rrs-lib",
+ "semver",
+ "serde",
+ "sha2 0.10.8",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-zkvm-platform"
+version = "0.22.0-alpha.1"
+source = "git+https://github.com/risc0/risc0.git#df99cddbc5c8790b2a7d467f9552a554a264792e"
+dependencies = [
+ "bytemuck",
+ "getrandom 0.2.14",
+ "libm 0.2.8",
+]
+
+[[package]]
+name = "rrs-lib"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b4382d3af3a4ebdae7f64ba6edd9114fff92c89808004c4943b393377a25d001"
+dependencies = [
+ "downcast-rs",
+ "paste",
+]
+
+[[package]]
+name = "rstest"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86fcf8fa7e9f3b396a5967d7455c057532a81be5114c81d5b02fae9a1f8e21d7"
+dependencies = [
+ "futures",
+ "futures-timer",
+ "rstest_macros",
+ "rustc_version",
+]
+
+[[package]]
+name = "rstest_macros"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5015e68a0685a95ade3eee617ff7101ab6a3fc689203101ca16ebc16f2b89c66"
+dependencies = [
+ "cfg-if 1.0.0",
+ "proc-macro2",
+ "quote",
+ "rustc_version",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2735,7 +3491,7 @@ checksum = "e88edab869b01783ba905e7d0153f9fc1a6505a96e4ad3018011eedb838566d9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -2757,7 +3513,7 @@ checksum = "6c64451ba24fc7a6a2d60fc75dd9c83c90903b19028d4eff35e88fc1e86564e9"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -2803,7 +3559,7 @@ dependencies = [
  "darling",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -2815,7 +3571,7 @@ dependencies = [
  "darling",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3017,7 +3773,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustversion",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3039,9 +3795,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.59"
+version = "2.0.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a6531ffc7b071655e4ce2e04bd464c4830bb585a61cabb96cf808f05172615a"
+checksum = "909518bc7b1c9b779f1bbf07f2929d35af9f0f37e47c6e9ef7f9dddc1e1821f3"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3057,7 +3813,7 @@ dependencies = [
  "proc-macro-error",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3079,13 +3835,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "termcolor"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
+dependencies = [
+ "winapi-util",
+]
+
+[[package]]
 name = "testing-contract"
 version = "0.1.0"
 dependencies = [
  "getrandom 0.2.14",
+ "near-bigint",
  "near-sdk",
- "plonky2-reputation",
+ "near_groth16_verifier",
  "rand 0.8.5",
+ "risc0-groth16",
+ "risc0-zkvm",
  "serde_json",
 ]
 
@@ -3115,7 +3883,7 @@ checksum = "c61f3ba182994efc43764a46c018c347bc492c79f024e705f46567b418f6d4f7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3230,7 +3998,7 @@ checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3396,7 +4164,7 @@ checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3610,7 +4378,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
  "wasm-bindgen-shared",
 ]
 
@@ -3632,7 +4400,7 @@ checksum = "e94f17b526d0a461a191c78ea52bbce64071ed5c04c9ffe424dcb38f74171bb7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -3881,7 +4649,7 @@ checksum = "9ce1b18ccd8e73a9321186f97e46f9f04b778851177567b1975109d26a08d2a6"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]
@@ -3901,7 +4669,7 @@ checksum = "ce36e65b0d2999d2aafac989fb249189a141aee1f53c612c1f37d72631959f69"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.59",
+ "syn 2.0.60",
 ]
 
 [[package]]

@@ -26,11 +26,6 @@ hex = "0.4"
 near_groth16_verifier = { path = "../../contract-libraries/groth_verifier/near_groth16_verifier" }
 near-bigint = { path = "../../contract-libraries/near_bigint" }
 
-risc0-groth16 = { git = "https://github.com/risc0/risc0.git", default-features = false }
-risc0-zkvm = { git = "https://github.com/risc0/risc0.git", default-features = false }
-ark-bn254 = { version = "0.4" }
-ark-serialize = { version = "0.4" }
-
 [profile.release]
 codegen-units = 1
 # Tell `rustc` to optimize for small code size.

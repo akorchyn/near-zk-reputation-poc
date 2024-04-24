@@ -7,8 +7,6 @@ use near_groth16_verifier::{G1Point, G2Point};
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::{env, log, near_bindgen, BorshStorageKey, PanicOnDefault};
-use risc0_zkvm::sha::{Digest, Digestible};
-use risc0_zkvm::ReceiptClaim;
 
 // // use plonky2_reputation::Proof;
 // // use plonky2_reputation::{prelude::*, Digest};
@@ -50,10 +48,7 @@ enum StorageKey {
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 #[borsh(crate = "near_sdk::borsh")]
 pub struct Contract {
-    digest: [u32; 8],
     verifier: near_groth16_verifier::Verifier,
-    a_public: (U256, U256),
-    id_p254_hash_public: U256,
 }
 
 // #[derive(Debug, Clone, Deserialize, Serialize, NearSchema, BorshDeserialize, BorshSerialize)]
@@ -78,31 +73,12 @@ impl Contract {
         gamma2: G2Point,
         delta2: G2Point,
         ic: Vec<G1Point>,
-        digest: Digest,
-        a_public: (U256, U256),
-        id_p254_hash_public: U256,
     ) -> Self {
         let verifier = near_groth16_verifier::Verifier::new(alfa1, beta2, gamma2, delta2, ic);
-        Self {
-            verifier,
-            digest: digest.into(),
-            a_public,
-            id_p254_hash_public,
-        }
+        Self { verifier }
     }
 
-    pub fn verify_proof(&mut self, proof: near_groth16_verifier::Proof, claim: ReceiptClaim) {
-        let digest = claim.digest();
-
-        let (a, b) = split_digest(digest);
-        let public_inputs = vec![
-            self.a_public.0,
-            self.a_public.1,
-            a,
-            b,
-            self.id_p254_hash_public,
-        ];
-        log!("Used gas: {:?}", env::used_gas().as_tgas());
+    pub fn verify_proof(&mut self, proof: near_groth16_verifier::Proof, public_inputs: Vec<U256>) {
         let verify = self.verifier.verify(public_inputs, proof);
         log!(
             "verify: {:?} with gas {}",
@@ -110,9 +86,4 @@ impl Contract {
             env::used_gas().as_tgas()
         );
     }
-}
-
-fn split_digest(digest: Digest) -> (U256, U256) {
-    let (a, b) = risc0_groth16::split_digest(digest).unwrap();
-    (U256(a.0 .0), U256(b.0 .0))
 }

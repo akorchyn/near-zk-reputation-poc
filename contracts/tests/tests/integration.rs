@@ -1,22 +1,16 @@
-use hex::FromHex;
 use near_bigint::U256;
 use near_groth16_verifier::CommitmentKey;
 use near_groth16_verifier::G1Point;
 use near_groth16_verifier::G2Point;
 use near_groth16_verifier::Proof;
 use near_groth16_verifier::Verifier;
-use near_sdk::json_types::Base64VecU8;
 use near_sdk::json_types::U128;
 use near_sdk::{Gas, NearToken};
 use near_workspaces::{Account, Contract, DevNetwork, Worker};
-use serde::{Deserialize, Serialize};
-use serde_json::from_str;
 use serde_json::json;
-use serde_json::Value;
 
 async fn init(
     worker: &Worker<impl DevNetwork>,
-    initial_balance: U128,
     arguments: serde_json::Value,
 ) -> anyhow::Result<(Contract, Account)> {
     let contract = worker
@@ -112,16 +106,15 @@ async fn test_groth() -> anyhow::Result<()> {
         key,
     );
 
-    let (contract, alice) = init(
+    let (contract, _alice) = init(
         &worker,
-        NearToken::from_near(10).as_yoctonear().into(),
         json!({
             "verifier": verifier
         }),
     )
     .await
     .unwrap();
-    let mut proof_json = include_str!("../../../gnark-plonky2-verifier/proof.json");
+    let proof_json = include_str!("../../../gnark-plonky2-verifier/proof.json");
     let proof_data: serde_json::Value =
         serde_json::from_str(&proof_json).expect("Failed to parse proof.json");
 

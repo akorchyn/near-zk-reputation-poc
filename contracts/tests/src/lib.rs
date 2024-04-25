@@ -1,6 +1,6 @@
 // Find all our documentation at https://docs.near.org
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::{log, near_bindgen};
+use near_sdk::near_bindgen;
 
 // Define the contract structure
 #[near_bindgen]
@@ -24,7 +24,7 @@ impl Contract {
 #[cfg(test)]
 mod test {
     use near_bigint::U256;
-    use near_groth16_verifier::{hash_to_field, CommitmentKey, G1Point, G2Point};
+    use near_groth16_verifier::{CommitmentKey, G1Point, G2Point};
 
     fn parse_g1_point(point_data: &serde_json::Value) -> G1Point {
         G1Point {

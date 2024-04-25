@@ -9,7 +9,7 @@ edition = "2021"
 #repository = "https://github.com/xxx/xxx"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]

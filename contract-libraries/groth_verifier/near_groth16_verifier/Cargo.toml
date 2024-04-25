@@ -17,6 +17,7 @@ crate-type = ["cdylib", "rlib"]
 near-sdk = { version = "5.0.0", features = ["unstable"] }
 near-bigint = { path = "../../near_bigint", version = "1.0.1" }
 hex = "0.4.3"
+merlin = { version = "3.0.0", default-features = false }
 
 [dev-dependencies]
 rstest = "0.14.0"

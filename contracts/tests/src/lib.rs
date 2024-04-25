@@ -34,6 +34,10 @@ mod test {
     }
 
     fn parse_g2_point(point_data: &serde_json::Value) -> G2Point {
+        if point_data.is_null() {
+            return G2Point::zero();
+        }
+
         G2Point {
             x: [
                 U256::from_dec_str(point_data["X"]["A0"].as_str().unwrap()).unwrap(),
@@ -81,8 +85,8 @@ mod test {
             .collect();
 
         let key = CommitmentKey {
-            a: beta2.clone(),
-            b: beta2.clone(),
+            g: parse_g2_point(&vk_data["CommitmentKey"]["g"]),
+            g_root_sigma_neg: parse_g2_point(&vk_data["CommitmentKey"]["gRootSigmaNeg"]),
         };
 
         let verifier = Verifier::new(

@@ -1,10 +1,14 @@
 use near_bigint::{U256, U512};
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::env::{sha256, sha256_array};
+use near_sdk::env::{self, sha256, sha256_array};
 use near_sdk::serde::{Deserialize, Serialize};
 pub use pairing::{pairing_prod_4, G1Point, G2Point};
 
+use crate::fiatshamir::fold_commitments;
+
+mod fiatshamir;
 mod pairing;
+pub use fiatshamir::CommitmentKey;
 
 const COMMITMENT_DST: &[u8] = b"bsb22-commitment";
 
@@ -20,14 +24,6 @@ pub struct Verifier {
     pub snark_scalar_field: U256,
     pub public_and_commitment_commited: Vec<Vec<U256>>,
     pub commitment_key: CommitmentKey,
-}
-
-#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
-#[borsh(crate = "near_sdk::borsh")]
-#[serde(crate = "near_sdk::serde")]
-pub struct CommitmentKey {
-    pub a: G2Point,
-    pub b: G2Point,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -67,9 +63,9 @@ impl Verifier {
 
     pub fn verify(&self, mut input: Vec<U256>, proof: Proof) -> bool {
         let public_inputs = self.ic.len() - self.public_and_commitment_commited.len();
-        assert_eq!(input.len() + 1, public_inputs, "verifier-bad-input");
-
-        // todo!("Commitment verification with commitment_pok");
+        if input.len() + 1 != public_inputs {
+            env::panic_str("invalid-input-length")
+        }
 
         let max_nb_commitments = self
             .public_and_commitment_commited
@@ -78,6 +74,8 @@ impl Verifier {
             .max()
             .unwrap_or_default();
         let mut pre_hash_bytes = Vec::with_capacity(64 + max_nb_commitments * 32);
+        let mut commitment_serialized =
+            Vec::with_capacity(self.public_and_commitment_commited.len() * 32);
 
         let module = U512::from_big_endian(&self.snark_scalar_field.to_be_bytes());
         for i in 0..self.public_and_commitment_commited.len() {
@@ -91,8 +89,19 @@ impl Verifier {
             }
 
             let public_commitments = hash_to_field(&pre_hash_bytes, COMMITMENT_DST, module)
-                .expect("hash-to-field error");
+                .unwrap_or_else(|_| env::panic_str("hash-to-field-failed"));
+
+            commitment_serialized.extend(public_commitments.to_be_bytes());
             input.push(public_commitments);
+        }
+        let folded = fold_commitments(&proof.commitments, &[commitment_serialized])
+            .unwrap_or_else(|| env::panic_str("fold-commitments-failed"));
+
+        if !self
+            .commitment_key
+            .verify(folded, proof.commitments_pok, self.snark_scalar_field)
+        {
+            return false;
         }
 
         let mut vk_x = G1Point {
@@ -100,21 +109,13 @@ impl Verifier {
             y: U256::zero(),
         };
         vk_x = G1Point::addition(&vk_x, &self.ic[0]);
-        for i in 0..input.len() {
-            assert!(
-                input[i] < self.snark_scalar_field,
-                "verifier-gte-snark-scalar-field"
-            );
+        for (i, p) in input.into_iter().enumerate() {
+            check_scalar_field_element(p, self.snark_scalar_field);
 
-            vk_x = G1Point::addition(&vk_x, &self.ic[i + 1].scalar_mul(input[i]));
+            vk_x = G1Point::addition(&vk_x, &self.ic[i + 1].scalar_mul(p));
         }
 
         for i in 0..proof.commitments.len() {
-            assert!(
-                proof.commitments[i].x < self.snark_scalar_field,
-                "verifier-gte-snark-scalar-field"
-            );
-
             vk_x = G1Point::addition(&vk_x, &proof.commitments[i]);
         }
 
@@ -142,6 +143,12 @@ pub fn hash_to_field(msg: &[u8], dst: &[u8], modulus: U512) -> Result<U256, Stri
     let u512_modulus = u512.div_mod(modulus).1;
     // Skip the first 32 bytes that would be 0
     Ok(U256::from_big_endian(&u512_modulus.to_be_bytes()[32..]))
+}
+
+fn check_scalar_field_element(x: U256, modulus: U256) {
+    if x >= modulus {
+        env::panic_str("scalar-field-element-gte-modulus");
+    }
 }
 
 fn expand_msg_xmd(msg: &[u8], dst: &[u8], len_in_bytes: usize) -> Result<Vec<u8>, String> {
@@ -179,7 +186,7 @@ fn expand_msg_xmd(msg: &[u8], dst: &[u8], len_in_bytes: usize) -> Result<Vec<u8>
     for i in 2..=ell {
         // b_i = H(strxor(b₀, b_(i - 1)) ∥ I2OSP(i, 1) ∥ DST_prime)
         let strxor: Vec<u8> = b0.iter().zip(b1.iter()).map(|(x, y)| x ^ y).collect();
-        b1 = sha256(&[&strxor, &[i as u8].to_vec(), dst, &[size_domain]].concat());
+        b1 = sha256(&[strxor.as_slice(), &[i as u8], dst, &[size_domain]].concat());
         let start = H_SIZE * (i - 1);
         let end = std::cmp::min(H_SIZE * i, len_in_bytes);
         res[start..end].copy_from_slice(&b1[..end - start]);

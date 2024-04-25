@@ -35,6 +35,13 @@ impl G1Point {
         }
     }
 
+    pub fn zero() -> Self {
+        Self {
+            x: U256::zero(),
+            y: U256::zero(),
+        }
+    }
+
     pub fn to_packed_sum(&self, sign: u8) -> (u8, ([u8; 32], [u8; 32])) {
         assert!(sign <= 1, "invalid sign");
         (sign, (self.x.to_le_bytes(), self.y.to_le_bytes()))
@@ -52,8 +59,8 @@ impl G1Point {
             }
         } else {
             G1Point {
-                x: self.x.clone(),
-                y: q - (self.y.clone() % q),
+                x: self.x,
+                y: q - (self.y % q),
             }
         }
     }
@@ -136,6 +143,13 @@ impl G2Point {
                 )
                 .unwrap(),
             ],
+        }
+    }
+
+    pub fn zero() -> Self {
+        Self {
+            x: [U256::zero(), U256::zero()],
+            y: [U256::zero(), U256::zero()],
         }
     }
 }

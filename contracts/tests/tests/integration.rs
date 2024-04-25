@@ -4,7 +4,6 @@ use near_groth16_verifier::G1Point;
 use near_groth16_verifier::G2Point;
 use near_groth16_verifier::Proof;
 use near_groth16_verifier::Verifier;
-use near_sdk::json_types::U128;
 use near_sdk::{Gas, NearToken};
 use near_workspaces::{Account, Contract, DevNetwork, Worker};
 use serde_json::json;
@@ -13,11 +12,14 @@ async fn init(
     worker: &Worker<impl DevNetwork>,
     arguments: serde_json::Value,
 ) -> anyhow::Result<(Contract, Account)> {
-    let contract = worker
-        .dev_deploy(
+    let account = worker.dev_create_account().await?;
+
+    let contract = account
+        .deploy(
             &include_bytes!("../../../target/near/testing_contract/testing_contract.wasm").to_vec(),
         )
-        .await?;
+        .await?
+        .into_result()?;
 
     let res = contract
         .call("new")
@@ -28,15 +30,7 @@ async fn init(
     assert!(res.is_success(), "{:?}", res);
     println!("{:?}", res.logs());
 
-    let alice = contract
-        .as_account()
-        .create_subaccount("alice")
-        .initial_balance(NearToken::from_near(10))
-        .transact()
-        .await?
-        .into_result()?;
-
-    return Ok((contract, alice));
+    return Ok((contract, account));
 }
 
 fn parse_g1_point(point_data: &serde_json::Value) -> G1Point {
@@ -47,6 +41,10 @@ fn parse_g1_point(point_data: &serde_json::Value) -> G1Point {
 }
 
 fn parse_g2_point(point_data: &serde_json::Value) -> G2Point {
+    if point_data.is_null() {
+        return G2Point::zero();
+    }
+
     G2Point {
         x: [
             U256::from_dec_str(point_data["X"]["A0"].as_str().unwrap()).unwrap(),
@@ -93,8 +91,8 @@ async fn test_groth() -> anyhow::Result<()> {
         .collect();
 
     let key = CommitmentKey {
-        a: beta2.clone(),
-        b: beta2.clone(),
+        g: parse_g2_point(&vk_data["CommitmentKey"]["g"]),
+        g_root_sigma_neg: parse_g2_point(&vk_data["CommitmentKey"]["gRootSigmaNeg"]),
     };
     let verifier = Verifier::new(
         alfa1,
@@ -106,7 +104,7 @@ async fn test_groth() -> anyhow::Result<()> {
         key,
     );
 
-    let (contract, _alice) = init(
+    let (contract, alice) = init(
         &worker,
         json!({
             "verifier": verifier

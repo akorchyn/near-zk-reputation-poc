@@ -12,10 +12,6 @@ use serde_json::from_str;
 use serde_json::json;
 use serde_json::Value;
 
-const VERIFIER_DATA: &str =
-    include_str!("../../../plonky2-reputation/reputation_proof.verify.json");
-const PROOF: &str = include_str!("../../../plonky2-reputation/reputation_proof.json");
-
 async fn init(
     worker: &Worker<impl DevNetwork>,
     initial_balance: U128,
@@ -136,7 +132,7 @@ async fn test_groth() -> anyhow::Result<()> {
             }
         })
         .chain([
-            "14025927619038021320133802710314150021159084526285453179597508431688164562731"
+            "1212419622962556353408993964402064441481893505329695422028663640108638778635"
                 .to_string(),
         ])
         .collect();

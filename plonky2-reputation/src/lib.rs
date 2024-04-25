@@ -19,8 +19,6 @@ pub mod prelude {
     };
     pub use plonky2::plonk::config::{GenericConfig, PoseidonGoldilocksConfig};
     pub use plonky2::plonk::proof::{CompressedProofWithPublicInputs, ProofWithPublicInputs};
-
-    // pub use crate::{gadgets::reputation_list::ReputationSet, C, D, F};
 }
 
 #[cfg(test)]

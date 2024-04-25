@@ -1,6 +1,5 @@
 use near_bigint::U256;
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::log;
 use near_sdk::serde::{Deserialize, Serialize};
 pub use pairing::{pairing_prod_4, G1Point, G2Point};
 
@@ -72,8 +71,6 @@ impl Verifier {
 
             vk_x = G1Point::addition(&vk_x, &proof.commitments[i]);
         }
-
-        log!("vk_x: {:?}", vk_x);
 
         pairing_prod_4(
             &proof.a.negate(),

@@ -8,41 +8,24 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-plonky2 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
-plonky2_u32 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
-plonky2_ecdsa = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
-plonky2_sha512_u32 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
-plonky2_ed25519 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
-plonky2_bn128 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
-
-
-itertools = { version = "0.11.0", default-features = false }
-serde = { version = "1.0", default-features = false, features = [
-    "derive",
-    "rc",
-] }
-anyhow = { version = "1.0.40", default-features = false }
-serde_json = "1.0"
-hex = "0.4"
-clap = { version = "4.0.29", features = ["derive"] }
-base64 = "0.22"
-log = "0.4"
-env_logger = "0.11"
-ed25519-dalek = "1.0"
-rand = { version = "0.7", default-features = false }
-num = { version = "0.4", features = ["rand"] }
+plonky2.workspace = true
+plonky2_u32.workspace = true
+plonky2_ecdsa.workspace = true
+plonky2_sha512_u32.workspace = true
+plonky2_ed25519.workspace = true
+plonky2_bn128.workspace = true
+itertools = { workspace = true, features = ["use_alloc"] }
+serde.workspace = true
+anyhow.workspace = true
+serde_json.workspace = true
+hex.workspace = true
+clap.workspace = true
+base64.workspace = true
+log.workspace = true
+env_logger.workspace = true
+ed25519-dalek.workspace = true
+rand.workspace = true
+num.workspace = true
 
 [dev-dependencies]
-hex-literal = "0.4"
-
-
-[profile.release]
-opt-level = 3
-#lto = "fat"
-#codegen-units = 1
-
-[profile.bench]
-opt-level = 3
-
-[profile.test]
-opt-level = 3
+hex-literal.workspace = true

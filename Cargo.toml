@@ -1,10 +1,5 @@
 [workspace]
-members = [
-    "contracts/testing-contract",
-    "deps/plonky2_ed25519",
-    "deps/plonky2/plonky2",
-    "plonky2-reputation",
-]
+members = ["contracts/testing-contract", "plonky2-reputation"]
 exclude = ["contracts/tests"]
 resolver = "2"
 
@@ -27,26 +22,17 @@ repository = "https://github.com/akorchyn/zk-near"
 [workspace.dependencies]
 # Near ecosystem
 near-sdk = "5.0.0"
-# near-workspaces = { version = "0.10.0", features = ["unstable"] }
 
 # General
-serde_json = "1"
 tokio = { version = "1.12.0", features = ["full"] }
 anyhow = "1.0"
 schemars = { version = "0.8.11" }
-serde = { version = "1.0" }
 thiserror = { version = "1.0" }
 
 # crypto 
 secp256k1 = "0.28"
 aes-siv = "0.7.0"
 bs58 = "0.5"
-
-# ZK
-near_mimc = { path = "contract-libraries/near_mimc" }
-near_groth16_verifier = { path = "contract-libraries/groth_verifier/near_groth16_verifier" }
-near_plonk_verifier = { path = "contract-libraries/plonk_verifier/near_plonk_verifier" }
-
 
 ahash = { version = "0.8.7", default-features = false, features = [
     "compile-time-rng",
@@ -55,16 +41,32 @@ hashbrown = { version = "0.14.3", default-features = false, features = [
     "ahash",
     "serde",
 ] } # NOTE: When upgrading, see `ahash` dependency.
-itertools = { version = "0.11.0", default-features = false }
 log = { version = "0.4.14", default-features = false }
 num = { version = "0.4", default-features = false, features = ["rand"] }
-rand = { version = "0.8.4", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
 unroll = { version = "0.1.5", default-features = false }
+itertools = { version = "0.12.0", default-features = false }
+serde = { version = "1.0", default-features = false, features = [
+    "derive",
+    "rc",
+] }
+serde_json = "1.0"
+hex = "0.4"
+hex-literal = "0.4"
+clap = { version = "4.0.29", features = ["derive"] }
+base64 = "0.22"
+env_logger = "0.11"
+ed25519-dalek = "1.0"
+rand = { version = "0.7", default-features = false }
 
-plonky2_ed25519 = { path = "./deps/plonky2_ed25519" }
-plonky2 = { path = "./deps/plonky2/plonky2" }
-plonky2-reputation = { path = "./plonky2-reputation" }
+plonky2 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_u32 = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_ecdsa = { git = "https://github.com/zpoken/plonky2", rev = "a5e436079004cc4870313036324267b385089ee6" }
+plonky2_sha512_u32 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
+plonky2_ed25519 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
+plonky2_bn128 = { git = "https://github.com/ZpokenWeb3/zk-light-client-implementation" }
 
-# [patch."https://github.com/Electron-Labs/plonky2"]
-# plonky2 = { path = "deps/plonky2/plonky2" }
+# ZK
+near_mimc = { path = "contract-libraries/near_mimc" }
+near_groth16_verifier = { path = "contract-libraries/groth_verifier/near_groth16_verifier" }
+near-bigint = { path = "contract-libraries/near_bigint" }

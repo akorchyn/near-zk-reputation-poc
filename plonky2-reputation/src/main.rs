@@ -5,18 +5,16 @@ use anyhow::Result;
 use clap::Parser;
 use ed25519_dalek::{PublicKey, SecretKey};
 use itertools::Itertools;
-use log::{info, Level, LevelFilter};
+use log::{Level, LevelFilter};
 use plonky2::field::extension::Extendable;
 use plonky2::field::types::Field;
 use plonky2::hash::hash_types::RichField;
 use plonky2::hash::merkle_tree::MerkleTree;
 use plonky2::hash::poseidon::PoseidonHash;
-use plonky2::iop::target::Target;
 use plonky2::iop::witness::{PartialWitness, WitnessWrite};
 use plonky2::plonk::circuit_builder::CircuitBuilder;
 use plonky2::plonk::circuit_data::{
-    CircuitConfig, CircuitData, CommonCircuitData, VerifierCircuitData, VerifierCircuitTarget,
-    VerifierOnlyCircuitData,
+    CircuitConfig, CircuitData, CommonCircuitData, VerifierCircuitTarget, VerifierOnlyCircuitData,
 };
 use plonky2::plonk::config::{AlgebraicHasher, GenericConfig, Hasher};
 use plonky2::plonk::proof::ProofWithPublicInputs;

@@ -128,12 +128,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anes"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299"
-
-[[package]]
 name = "anstream"
 version = "0.6.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -415,12 +409,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cast"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
-
-[[package]]
 name = "cc"
 version = "1.0.94"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -460,50 +448,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "ciborium"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42e69ffd6f0917f5c029256a24d0161db17cea3997d185db0d35926308770f0e"
-dependencies = [
- "ciborium-io",
- "ciborium-ll",
- "serde",
-]
-
-[[package]]
-name = "ciborium-io"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05afea1e0a06c9be33d539b876f1ce3692f4afea2cb41f740e7743225ed1c757"
-
-[[package]]
-name = "ciborium-ll"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57663b653d948a338bfb3eeba9bb2fd5fcfaecb9e199e87e1eda4d9e8b240fd9"
-dependencies = [
- "ciborium-io",
- "half 2.4.1",
-]
-
-[[package]]
 name = "cipher"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12f8e7987cbd042a63249497f41aed09f8e65add917ea6566effbc56578d6801"
 dependencies = [
  "generic-array",
-]
-
-[[package]]
-name = "clap"
-version = "2.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0610544180c38b88101fecf2dd634b174a62eef6946f84dfc6a7127512b381c"
-dependencies = [
- "bitflags 1.3.2",
- "textwrap",
- "unicode-width",
 ]
 
 [[package]]
@@ -594,40 +544,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "criterion"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f2b12d017a929603d80db1831cd3a24082f8137ce19c69e6447f54f5fc8d692f"
-dependencies = [
- "anes",
- "cast",
- "ciborium",
- "clap 4.5.4",
- "criterion-plot",
- "is-terminal",
- "itertools 0.10.5",
- "num-traits",
- "once_cell",
- "oorandom",
- "regex",
- "serde",
- "serde_derive",
- "serde_json",
- "tinytemplate",
- "walkdir",
-]
-
-[[package]]
-name = "criterion-plot"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b50826342786a51a89e2da3a28f1c32b06e387201bc2d19791f622c673706b1"
-dependencies = [
- "cast",
- "itertools 0.10.5",
-]
-
-[[package]]
 name = "crossbeam-channel"
 version = "0.5.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -715,28 +631,13 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "4.0.0"
-source = "git+https://github.com/Electron-Labs/curve25519-dalek#fd71e1a4f0f36a7e3590177e999ca72b9c41ba42"
-dependencies = [
- "cfg-if 1.0.0",
- "cpufeatures",
- "curve25519-dalek-derive 0.1.0",
- "fiat-crypto 0.1.20",
- "platforms",
- "rustc_version",
- "subtle",
- "zeroize",
-]
-
-[[package]]
-name = "curve25519-dalek"
 version = "4.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0a677b8922c94e01bdbb12126b0bc852f00447528dee1782229af9c720c3f348"
 dependencies = [
  "cfg-if 1.0.0",
  "cpufeatures",
- "curve25519-dalek-derive 0.1.1",
+ "curve25519-dalek-derive",
  "digest 0.10.7",
  "fiat-crypto 0.2.7",
  "platforms",
@@ -744,16 +645,6 @@ dependencies = [
  "rustc_version",
  "subtle",
  "zeroize",
-]
-
-[[package]]
-name = "curve25519-dalek-derive"
-version = "0.1.0"
-source = "git+https://github.com/Electron-Labs/curve25519-dalek#fd71e1a4f0f36a7e3590177e999ca72b9c41ba42"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.60",
 ]
 
 [[package]]
@@ -1250,22 +1141,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "half"
-version = "1.8.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b43ede17f21864e81be2fa654110bf1e793774238d86ef8555c37e6519c0403"
-
-[[package]]
-name = "half"
-version = "2.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6dd08c532ae367adf81c312a4580bc67f1d0fe8bc9c460520283f4c0ff277888"
-dependencies = [
- "cfg-if 1.0.0",
- "crunchy",
-]
-
-[[package]]
 name = "hashbrown"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1470,17 +1345,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "is-terminal"
-version = "0.4.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f23ff5ef2b80d608d61efee834934d862cd92461afc0560dedf493e4c033738b"
-dependencies = [
- "hermit-abi 0.3.9",
- "libc",
- "windows-sys 0.52.0",
-]
-
-[[package]]
 name = "itertools"
 version = "0.10.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1499,30 +1363,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
-
-[[package]]
-name = "jemalloc-sys"
-version = "0.5.4+5.3.0-patched"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac6c1946e1cea1788cbfde01c993b52a10e2da07f4bac608228d1bed20bfebf2"
-dependencies = [
- "cc",
- "libc",
-]
-
-[[package]]
-name = "jemallocator"
-version = "0.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0de374a9f8e63150e6f5e8a60cc14c668226d7a347d8aee1a45766e3c4dd3bc"
-dependencies = [
- "jemalloc-sys",
- "libc",
-]
 
 [[package]]
 name = "js-sys"
@@ -1630,12 +1483,6 @@ name = "memory_units"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8452105ba047068f40ff7093dd1d9da90898e63dd61736462e9cdda6a90ad3c3"
-
-[[package]]
-name = "minimal-lexical"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
 
 [[package]]
 name = "miniz_oxide"
@@ -1749,7 +1596,7 @@ checksum = "d20762631bc8253030013bbae9b5f0542691edc1aa6722f1e8141cc9b928ae5b"
 dependencies = [
  "actix",
  "base64 0.21.7",
- "clap 4.5.4",
+ "clap",
  "near-crypto",
  "near-fmt",
  "near-primitives-core",
@@ -1820,7 +1667,7 @@ dependencies = [
  "reed-solomon-erasure",
  "serde",
  "serde_json",
- "serde_with 3.7.0",
+ "serde_with",
  "serde_yaml",
  "sha3",
  "smart-default",
@@ -1846,7 +1693,7 @@ dependencies = [
  "num-rational 0.3.2",
  "serde",
  "serde_repr",
- "serde_with 3.7.0",
+ "serde_with",
  "sha2 0.10.8",
  "strum 0.24.1",
  "thiserror",
@@ -1960,7 +1807,7 @@ dependencies = [
  "ripemd",
  "serde",
  "serde_repr",
- "serde_with 3.7.0",
+ "serde_with",
  "sha2 0.10.8",
  "sha3",
  "strum 0.24.1",
@@ -1976,16 +1823,6 @@ dependencies = [
  "near-bigint",
  "near-sdk",
  "rstest",
-]
-
-[[package]]
-name = "nom"
-version = "7.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
-dependencies = [
- "memchr",
- "minimal-lexical",
 ]
 
 [[package]]
@@ -2129,12 +1966,6 @@ name = "once_cell"
 version = "1.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
-
-[[package]]
-name = "oorandom"
-version = "11.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ab1bc2a289d34bd04a330323ac98a1b4bc82c9d9fcb1e66b63caa84da26b575"
 
 [[package]]
 name = "opaque-debug"
@@ -2292,62 +2123,6 @@ checksum = "db23d408679286588f4d4644f965003d056e3dd5abcaaa938116871d7ce2fee7"
 [[package]]
 name = "plonky2"
 version = "0.1.4"
-dependencies = [
- "ahash",
- "anyhow",
- "criterion",
- "env_logger 0.9.3",
- "getrandom 0.2.14",
- "hashbrown 0.14.3",
- "itertools 0.11.0",
- "jemallocator",
- "keccak-hash",
- "log",
- "num",
- "num_cpus",
- "plonky2_field 0.1.1",
- "plonky2_maybe_rayon 0.1.1",
- "plonky2_util 0.1.1",
- "rand 0.8.5",
- "rand_chacha 0.3.1",
- "serde",
- "serde_cbor",
- "serde_json",
- "static_assertions",
- "structopt",
- "tynm",
- "unroll",
-]
-
-[[package]]
-name = "plonky2"
-version = "0.1.4"
-source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
-dependencies = [
- "ahash",
- "anyhow",
- "ff",
- "getrandom 0.2.14",
- "hashbrown 0.14.3",
- "itertools 0.11.0",
- "keccak-hash",
- "lazy_static",
- "log",
- "num",
- "plonky2_field 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "plonky2_maybe_rayon 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "plonky2_util 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "rand 0.8.5",
- "rand_chacha 0.3.1",
- "serde",
- "serde_json",
- "static_assertions",
- "unroll",
-]
-
-[[package]]
-name = "plonky2"
-version = "0.1.4"
 source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
 dependencies = [
  "ahash",
@@ -2359,9 +2134,9 @@ dependencies = [
  "keccak-hash",
  "log",
  "num",
- "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_field",
  "plonky2_maybe_rayon 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
- "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util",
  "rand 0.8.5",
  "rand_chacha 0.3.1",
  "serde",
@@ -2376,18 +2151,18 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "base64 0.22.0",
- "clap 4.5.4",
+ "clap",
  "ed25519-dalek 1.0.1",
  "env_logger 0.11.3",
  "hex",
  "hex-literal",
- "itertools 0.11.0",
+ "itertools 0.12.1",
  "log",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
  "plonky2_bn128",
  "plonky2_ecdsa",
- "plonky2_ed25519 0.1.0 (git+https://github.com/ZpokenWeb3/zk-light-client-implementation)",
+ "plonky2_ed25519",
  "plonky2_sha512_u32",
  "plonky2_u32",
  "rand 0.7.3",
@@ -2404,28 +2179,11 @@ dependencies = [
  "ff",
  "lazy_static",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
- "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
+ "plonky2_field",
  "serde",
  "serde_derive",
  "serde_json",
-]
-
-[[package]]
-name = "plonky2_crypto"
-version = "0.1.0"
-source = "git+https://github.com/Electron-Labs/plonky2-crypto#3f7137851717a44a39a6d11646df72bb0599d269"
-dependencies = [
- "anyhow",
- "hex",
- "itertools 0.11.0",
- "num",
- "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "plonky2_maybe_rayon 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.8.5",
- "rayon",
- "serde",
- "serde_with 2.3.3",
 ]
 
 [[package]]
@@ -2436,29 +2194,10 @@ dependencies = [
  "anyhow",
  "itertools 0.10.5",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
  "plonky2_maybe_rayon 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "plonky2_u32",
  "serde",
-]
-
-[[package]]
-name = "plonky2_ed25519"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "curve25519-dalek 4.0.0",
- "env_logger 0.9.3",
- "itertools 0.11.0",
- "log",
- "num",
- "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "plonky2_crypto",
- "plonky2_sha512 0.1.0 (git+https://github.com/Electron-Labs/plonky2_sha512)",
- "rand 0.8.5",
- "serde",
- "serde_json",
- "sha2 0.10.8",
 ]
 
 [[package]]
@@ -2473,12 +2212,12 @@ dependencies = [
  "keccak-hash",
  "log",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
  "plonky2_ecdsa",
- "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
- "plonky2_sha512 0.1.0 (git+https://github.com/ZpokenWeb3/zk-light-client-implementation)",
+ "plonky2_field",
+ "plonky2_sha512",
  "plonky2_u32",
- "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util",
  "rand 0.8.5",
  "rand_chacha 0.3.1",
  "rayon",
@@ -2491,53 +2230,16 @@ dependencies = [
 [[package]]
 name = "plonky2_field"
 version = "0.1.1"
-dependencies = [
- "anyhow",
- "itertools 0.11.0",
- "num",
- "plonky2_util 0.1.1",
- "rand 0.8.5",
- "serde",
- "static_assertions",
- "unroll",
-]
-
-[[package]]
-name = "plonky2_field"
-version = "0.1.1"
-source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
-dependencies = [
- "anyhow",
- "ff",
- "itertools 0.11.0",
- "num",
- "plonky2_util 0.1.1 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "rand 0.8.5",
- "serde",
- "static_assertions",
- "unroll",
-]
-
-[[package]]
-name = "plonky2_field"
-version = "0.1.1"
 source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
 dependencies = [
  "anyhow",
  "itertools 0.11.0",
  "num",
- "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util",
  "rand 0.8.5",
  "serde",
  "static_assertions",
  "unroll",
-]
-
-[[package]]
-name = "plonky2_maybe_rayon"
-version = "0.1.1"
-dependencies = [
- "rayon",
 ]
 
 [[package]]
@@ -2549,29 +2251,9 @@ checksum = "194db0cbdd974e92d897cd92b74adb3968dc1b967315eb280357c49a7637994e"
 [[package]]
 name = "plonky2_maybe_rayon"
 version = "0.1.1"
-source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
-dependencies = [
- "rayon",
-]
-
-[[package]]
-name = "plonky2_maybe_rayon"
-version = "0.1.1"
 source = "git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6#a5e436079004cc4870313036324267b385089ee6"
 dependencies = [
  "rayon",
-]
-
-[[package]]
-name = "plonky2_sha512"
-version = "0.1.0"
-source = "git+https://github.com/Electron-Labs/plonky2_sha512#ede4937f09e4fc80eeeb11fd1e3ebaae135eaa87"
-dependencies = [
- "anyhow",
- "plonky2 0.1.4 (git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff)",
- "plonky2_crypto",
- "rand 0.8.5",
- "sha2 0.10.8",
 ]
 
 [[package]]
@@ -2585,11 +2267,11 @@ dependencies = [
  "keccak-hash",
  "log",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
  "plonky2_ecdsa",
- "plonky2_field 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_field",
  "plonky2_u32",
- "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util",
  "rand 0.8.5",
  "rand_chacha 0.3.1",
  "rayon",
@@ -2608,10 +2290,10 @@ dependencies = [
  "hex",
  "itertools 0.10.5",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
  "plonky2_maybe_rayon 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
  "plonky2_u32",
- "plonky2_util 0.1.1 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2_util",
  "rand 0.8.5",
  "rayon",
  "serde",
@@ -2625,20 +2307,8 @@ dependencies = [
  "anyhow",
  "itertools 0.10.5",
  "num",
- "plonky2 0.1.4 (git+https://github.com/zpoken/plonky2?rev=a5e436079004cc4870313036324267b385089ee6)",
+ "plonky2",
 ]
-
-[[package]]
-name = "plonky2_util"
-version = "0.1.1"
-dependencies = [
- "rand 0.8.5",
-]
-
-[[package]]
-name = "plonky2_util"
-version = "0.1.1"
-source = "git+https://github.com/Electron-Labs/plonky2?branch=derive_bn254_from_ff#565515bdc6f136a625d8dbefd1e466cbbe2e1cbe"
 
 [[package]]
 name = "plonky2_util"
@@ -2691,7 +2361,6 @@ dependencies = [
  "proc-macro-error-attr",
  "proc-macro2",
  "quote",
- "syn 1.0.109",
  "version_check",
 ]
 
@@ -3038,15 +2707,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e86697c916019a8588c99b5fac3cead74ec0b4b819707a682fd4d23fa0ce1ba1"
 
 [[package]]
-name = "same-file"
-version = "1.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
-dependencies = [
- "winapi-util",
-]
-
-[[package]]
 name = "scopeguard"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3087,16 +2747,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde_cbor"
-version = "0.11.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2bef2ebfde456fb76bbcf9f59315333decc4fda0b2b44b420243c11e0f5ec1f5"
-dependencies = [
- "half 1.8.3",
- "serde",
-]
-
-[[package]]
 name = "serde_derive"
 version = "1.0.198"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3131,22 +2781,6 @@ dependencies = [
 
 [[package]]
 name = "serde_with"
-version = "2.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "07ff71d2c147a7b57362cead5e22f772cd52f6ab31cfcd9edcd7f6aeb2a0afbe"
-dependencies = [
- "base64 0.13.1",
- "chrono",
- "hex",
- "indexmap 1.9.3",
- "serde",
- "serde_json",
- "serde_with_macros 2.3.3",
- "time",
-]
-
-[[package]]
-name = "serde_with"
 version = "3.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee80b0e361bbf88fd2f6e242ccd19cfda072cb0faa6ae694ecee08199938569a"
@@ -3159,20 +2793,8 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "serde_with_macros 3.7.0",
+ "serde_with_macros",
  "time",
-]
-
-[[package]]
-name = "serde_with_macros"
-version = "2.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "881b6f881b17d13214e5d494c939ebab463d01264ce1811e9d4ac3a882e7695f"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "syn 2.0.60",
 ]
 
 [[package]]
@@ -3325,30 +2947,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
-name = "structopt"
-version = "0.3.26"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c6b5c64445ba8094a6ab0c3cd2ad323e07171012d9c98b0b15651daf1787a10"
-dependencies = [
- "clap 2.34.0",
- "lazy_static",
- "structopt-derive",
-]
-
-[[package]]
-name = "structopt-derive"
-version = "0.4.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcb5ae327f9cc13b68763b5749770cb9e048a99bd9dfdfa58d0cf05d5f64afe0"
-dependencies = [
- "heck 0.3.3",
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
 name = "strum"
 version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3460,21 +3058,10 @@ dependencies = [
 name = "testing-contract"
 version = "0.1.0"
 dependencies = [
- "getrandom 0.2.14",
  "near-bigint",
  "near-sdk",
  "near_groth16_verifier",
- "rand 0.8.5",
  "serde_json",
-]
-
-[[package]]
-name = "textwrap"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d326610f408c7a4eb6f51c37c330e496b08506c9457c9d34287ecc38809fb060"
-dependencies = [
- "unicode-width",
 ]
 
 [[package]]
@@ -3545,16 +3132,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
 dependencies = [
  "crunchy",
-]
-
-[[package]]
-name = "tinytemplate"
-version = "1.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be4d6b5f19ff7664e8c98d03e2139cb510db9b0a60b55f8e8709b689d939b6bc"
-dependencies = [
- "serde",
- "serde_json",
 ]
 
 [[package]]
@@ -3859,15 +3436,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
 
 [[package]]
-name = "tynm"
-version = "0.1.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd30d05e69d1478e13fe3e7a853409cfec82cebc2cf9b8d613b3c6b0081781ed"
-dependencies = [
- "nom",
-]
-
-[[package]]
 name = "typenum"
 version = "1.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3896,12 +3464,6 @@ name = "unicode-segmentation"
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4c87d22b6e3f4a18d4d40ef354e97c90fcb14dd91d7dc0aa9d8a1172ebf7202"
-
-[[package]]
-name = "unicode-width"
-version = "0.1.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e51733f11c9c4f72aa0c160008246859e340b00807569a0da0e7a1079b27ba85"
 
 [[package]]
 name = "unroll"
@@ -3936,16 +3498,6 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
-
-[[package]]
-name = "walkdir"
-version = "2.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
-dependencies = [
- "same-file",
- "winapi-util",
-]
 
 [[package]]
 name = "want"

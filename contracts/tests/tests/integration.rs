@@ -1,8 +1,10 @@
 use hex::FromHex;
 use near_bigint::U256;
+use near_groth16_verifier::CommitmentKey;
 use near_groth16_verifier::G1Point;
 use near_groth16_verifier::G2Point;
 use near_groth16_verifier::Proof;
+use near_groth16_verifier::Verifier;
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::json_types::U128;
 use near_sdk::{Gas, NearToken};
@@ -82,15 +84,39 @@ async fn test_groth() -> anyhow::Result<()> {
         .map(|point| parse_g1_point(point))
         .collect();
 
+    let public_and_commitment_commited: Vec<Vec<U256>> = vk_data["PublicAndCommitmentCommitted"]
+        .as_array()
+        .unwrap()
+        .into_iter()
+        .map(|array| {
+            array
+                .as_array()
+                .unwrap()
+                .into_iter()
+                .map(|x| U256::from_dec_str(x.as_str().unwrap()).unwrap())
+                .collect::<Vec<_>>()
+        })
+        .collect();
+
+    let key = CommitmentKey {
+        a: beta2.clone(),
+        b: beta2.clone(),
+    };
+    let verifier = Verifier::new(
+        alfa1,
+        beta2,
+        gamma2,
+        delta2,
+        ic,
+        public_and_commitment_commited,
+        key,
+    );
+
     let (contract, alice) = init(
         &worker,
         NearToken::from_near(10).as_yoctonear().into(),
         json!({
-            "alfa1": alfa1,
-            "beta2": beta2,
-            "gamma2": gamma2,
-            "delta2": delta2,
-            "ic": ic,
+            "verifier": verifier
         }),
     )
     .await
@@ -109,12 +135,14 @@ async fn test_groth() -> anyhow::Result<()> {
         .iter()
         .map(|point| parse_g1_point(point))
         .collect();
+    let commitments_pok = parse_g1_point(&proof_data["CommitmentPok"]);
 
     let proof = Proof {
         a,
         b,
         c,
         commitments,
+        commitments_pok,
     };
 
     let witness_json = include_str!("../../../gnark-plonky2-verifier/pubwitness.json");
@@ -131,13 +159,7 @@ async fn test_groth() -> anyhow::Result<()> {
                 input["Limb"].as_u64().unwrap().to_string()
             }
         })
-        .chain([
-            "1212419622962556353408993964402064441481893505329695422028663640108638778635"
-                .to_string(),
-        ])
         .collect();
-
-    println!("{:?}", public_inputs);
 
     let res = contract
         .call("verify_proof")
@@ -150,7 +172,8 @@ async fn test_groth() -> anyhow::Result<()> {
         .await
         .unwrap();
     println!("{:?}", res.logs());
-    assert!(res.logs()[0].starts_with("verify: true"));
     println!("{:?}", res.receipt_failures());
+
+    assert!(res.logs()[0].starts_with("verify: true"));
     Ok(())
 }

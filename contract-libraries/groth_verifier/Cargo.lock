@@ -368,6 +368,7 @@ dependencies = [
 name = "near_groth16_verifier"
 version = "1.0.1"
 dependencies = [
+ "hex",
  "near-bigint",
  "near-sdk",
  "rstest",

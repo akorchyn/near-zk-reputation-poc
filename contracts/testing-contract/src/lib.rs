@@ -1,7 +1,7 @@
 #![feature(stdsimd)]
 
 use near_bigint::U256;
-use near_groth16_verifier::{G1Point, G2Point, Proof, Verifier};
+use near_groth16_verifier::{Proof, Verifier};
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::{env, log, near_bindgen, BorshStorageKey, PanicOnDefault};
 
@@ -26,14 +26,7 @@ pub struct Contract {
 impl Contract {
     #[private]
     #[init(ignore_state)]
-    pub fn new(
-        alfa1: G1Point,
-        beta2: G2Point,
-        gamma2: G2Point,
-        delta2: G2Point,
-        ic: Vec<G1Point>,
-    ) -> Self {
-        let verifier = Verifier::new(alfa1, beta2, gamma2, delta2, ic);
+    pub fn new(verifier: Verifier) -> Self {
         Self { verifier }
     }
 

@@ -2,7 +2,7 @@
 
 The idea of the repo was to create a managed reputation snapshot with public keys of ed25519 accounts. Given the list, the user could prove for the contract that the user owns one of the keys from the list but doesn't disclose which one.
 
-The solution might be utilized in governance mechanics, but the compute time, in general, is not usable for general users.
+The solution could be utilized in governance mechanics, but the compute time, in general, is not usable for general users.
 Nevertheless, the project might be useful for other parties even though the repo itself is abandoned for now :)
 
 As Plonky 2 is quite big and expensive to compute on the chain, I had to re-use gnark verifier for Plonky 2 to convert it to groth16.
@@ -13,14 +13,14 @@ Gnark verifier converts the proof but requires a commitment scheme for proof ver
 
 * Small example of using Plonky + Gnark + Near
 * Groth16 verifier that supports commitments (the performance might be suboptimal: ))
-* Plonky 2 proof of private key ownership. Private key to Public key proof
+* Plonky 2 proof of ed25519 private key ownership by proving that the user can convert the private key into the public key.
 
 ## Structure
 * contract-libraries - opact created libraries
   * contract-libraries/groth_verifier/near_groth16_verifier - adjusted groth16 verifier
-* contracts/tests/src/lib.rs - example verification on chain
+* contracts/tests/src/lib.rs - example verification on the chain
 * gnark-plonky2-verifier/benchmark.go - code to generate groth16 proof :)
-* plonky2-reputation - proof that the user is part of the merkle tree (owns a private key) with at least X reputation points
+* plonky2-reputation - proof that the user is part of the Merkle tree (owns a private key) with at least X reputation points
 
 
 ## Example usage
